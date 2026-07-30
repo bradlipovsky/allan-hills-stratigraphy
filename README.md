@@ -10,7 +10,7 @@ Let the old and young ice ages be $A_o$ and $A_y$. Let $w_{obs}$ be the measured
 2. The contact-age constraint comes from diffusion. For an initially sharp one-dimensional step with effective diffusivity $D$,
 
 $$
-w_d=4\,\operatorname{erf}^{-1}(0.8)\sqrt{Dt}\approx3.62\sqrt{Dt},
+w_d=4\,\text{erf}^{-1}(0.8)\sqrt{Dt}\approx3.62\sqrt{Dt},
 \qquad
 t_j=\frac{1}{D}\left(\frac{w_d}{3.62}\right)^2.
 $$
