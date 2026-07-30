@@ -9,11 +9,11 @@ Let the old and young ice ages be $A_o$ and $A_y$. Let $w_{obs}$ be the measured
 1. The missing-age constraint is $\Delta A=A_o-A_y$, with $A_o\approx5$ Ma and $A_y$ in the Pleistocene. A successful history must remove, bypass, or fold away the intervening ages.
 2. The contact-age constraint comes from diffusion. For an initially sharp one-dimensional step with effective diffusivity $D$,
 
-   $$
-   w_d=4\,\operatorname{erf}^{-1}(0.8)\sqrt{Dt}\approx3.62\sqrt{Dt},
-   \qquad
-   t_j=\frac{1}{D}\left(\frac{w_d}{3.62}\right)^2.
-   $$
+$$
+w_d=4\,\operatorname{erf}^{-1}(0.8)\sqrt{Dt}\approx3.62\sqrt{Dt},
+\qquad
+t_j=\frac{1}{D}\left(\frac{w_d}{3.62}\right)^2.
+$$
 
    Here $t_j$ is the time since the two isotope populations first became adjacent. The existing estimate places $t_j$ at no more than a few tens of thousands of years. Temperature history, strain thinning, sampling resolution, and anisotropic diffusion should be propagated as uncertainties rather than hidden in a single value of $D$.
 
