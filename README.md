@@ -4,7 +4,7 @@ This project asks what ice-flow and ice-sheet history could place approximately 
 
 ## Constraints that every hypothesis must satisfy
 
-Let the old and young ice ages be $A_o$ and $A_y$. Let $w_{obs}$ be the measured 10–90% width of the water-isotope step and $w_d$ the physical width inferred after accounting for sample averaging. The observations impose two distinct constraints:
+Let the old and young ice ages be $A_o$ and $A_y$. Let $w_{obs}$ be the measured 10–90% width of the water-isotope step and $w_d$ the physical width inferred after accounting for sample averaging. The observations impose three distinct constraints:
 
 1. The missing-age constraint is $\Delta A=A_o-A_y$, with $A_o\approx5$ Ma and $A_y$ in the Pleistocene. A successful history must remove, bypass, or fold away the intervening ages.
 2. The contact-age constraint comes from diffusion. For an initially sharp one-dimensional step with effective diffusivity $D$,
