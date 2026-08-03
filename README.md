@@ -102,6 +102,8 @@ The Waddington positive control verifies that this numerical framework can make 
 
 The [ALHIC1901 inverse-fit notebook](notebooks/alhic1901_full_stokes_fit.ipynb) takes the next step: it fits a compact, initially ordered basal wrinkle to the uploaded Shackleton et al. (2025) age data using velocity from a 160 m-thick full-Stokes slab. The target is the observed three-fold age–depth structure, not merely an arbitrary reversal. Its three modeled old-age peaks lie within 0.34 m of the data-defined peaks, with 0.38 Ma pointwise RMS age misfit and negligible factor-two mesh sensitivity. This is a qualified positive result: it requires an approximately 85° seed limb, so the visual match supplies a target for transient models rather than a unique or fully plausible reconstruction.
 
+The [alternating surface-mass-balance notebook](notebooks/alternating_smb_seed.ipynb) tests whether neighboring accumulation and ablation bands can create that seed. It uses an exact two-dimensional linear-viscous Stokes half-space response and evaluates 2592 layer outcomes. Present Allan Hills rates can create broader, order-10 m wrinkles with approximately 70° limbs, which subsequent basal shear can overturn. They do not directly reproduce the fitted 15.5 m wavelength, 10 m amplitude, and 85° dip together; short surface forcing attenuates within a few meters and stronger forcing tends to expose or truncate the layer.
+
 ## Minimal modeling sequence and success metrics
 
 1. Assemble the measured ages, isotope profiles, sample-response length, core locations, contact orientation, ice thickness, bed and surface geometry, accumulation/ablation, and present velocity. Record uncertainties and do not interpolate across the contact.
