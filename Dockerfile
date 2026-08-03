@@ -10,6 +10,7 @@ RUN bash -lc "source /home/firedrake/firedrake/bin/activate \
     && python -m pip install --no-cache-dir \
         git+https://github.com/icepack/icepack.git \
         nbclient \
-        nbconvert"
+        nbconvert \
+        openpyxl"
 
 WORKDIR /workspace
