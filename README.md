@@ -57,7 +57,7 @@ compares these effects. Relative to a local steady isochrone of slope $m_0$, the
 
 Ancient ice remains nearly stagnant and cold-based in a topographic pocket. A change in ice thickness, flow direction, divide position, or upstream flux later routes a lobe of Pleistocene ice against or beneath that reservoir. The required outcome is a thrust-like or recumbent geometry in which the old reservoir lies above the incoming Pleistocene ice while older ice remains below. The structural analogue is a surge front running into stagnant ice. At Variegated Glacier, this geometry produced intense shortening, folding, and faulting ([Raymond et al., 1987](https://doi.org/10.1029/JB092iB09p09037)); thrusts dipping about 40° up-glacier accounted for as much as 50% of local shortening ([Moore et al., 2010](https://doi.org/10.1029/2009JF001307)). Allan Hills is not a temperate surge glacier, so this analogy concerns the kinematics of a moving compressional front, not its basal hydrology.
 
-The minimal model is a two-dimensional incompressible flow band with prescribed transient velocity. Track age as a material label using
+The minimal model is a two-dimensional full-Stokes flow band with prescribed transient boundary forcing. Track age as a material label using
 
 $$
 \frac{\partial A}{\partial t}+\mathbf{u}\cdot\nabla A=1,
@@ -85,12 +85,24 @@ Compare a fixed wall with a migrating surface mass-balance dipole or prescribed 
 
 These histories are not mutually exclusive. The likely composite world is long-term preservation of old ice, formation or advection of an age unconformity or wrinkle, and a much more recent event that creates the present sharp inverted contact. In particular, a migrating Ice Wall, surface scour, or a basal patch could seed a disturbance that later steady shear overturns, as envisaged by the Waddington framework.
 
+## Initial two-dimensional full-Stokes tests
+
+Issue [#11](https://github.com/bradlipovsky/allan-hills-stratigraphy/issues/11) replaces the reduced collision, basal-patch, and Ice-Wall calculations with deliberately simple full-Stokes tests. Each notebook solves for horizontal velocity, vertical velocity, and pressure using a P2–P1 mixed finite-element pair, the complete symmetric velocity gradient, incompressibility, and gravity. Initially ordered material layers are then advected through the solved velocity and sampled with objective vertical synthetic cores.
+
+| Scenario | Idealized forcing | Maximum resolved vertical shear | Result |
+|---|---|---:|---|
+| [Collision](notebooks/full_stokes_collision.ipynb) | Opposing side inflow for 30 yr; compensating stress-free surface outflow | $6.00\times10^{-2}$ yr$^{-1}$ | 0 overturned segments; no bracketed Pleistocene minimum |
+| [Traveling basal patch](notebooks/full_stokes_basal_patch.ipynb) | 8 km low-drag Robin patch; 600 yr in a frame moving at 40 m yr$^{-1}$ | $2.98\times10^{-3}$ yr$^{-1}$ | 0 overturned segments; no bracketed Pleistocene minimum |
+| [Migrating Ice Wall](notebooks/full_stokes_ice_wall.ipynb) | 200 m surface step; 1 km of relative migration over 100 kyr | $6.62\times10^{-6}$ yr$^{-1}$ in the wall zone | 0 overturned segments; no bracketed Pleistocene minimum |
+
+All three conclusions persist when both mesh dimensions are doubled, and their boundary mass-flux residuals are far below 1%. These are negative results for the stated smooth, linear-viscous end members—not proofs that the broader histories are impossible. In particular, the collision calculation requires a large compensating surface flux, the basal patch is prescribed rather than thermomechanically generated, and the Ice Wall is a fixed geometry viewed in a translating frame. The calculations nevertheless show that resolved depth-dependent shear alone does not produce the observed old–Pleistocene–older order: the forcing must first create a sufficiently steep material wrinkle, thrust, or unconformity for subsequent shear to overturn.
+
 ## Minimal modeling sequence and success metrics
 
 1. Assemble the measured ages, isotope profiles, sample-response length, core locations, contact orientation, ice thickness, bed and surface geometry, accumulation/ablation, and present velocity. Record uncertainties and do not interpolate across the contact.
 2. Recalculate the diffusion bound by fitting an error-function step convolved with the sampling kernel. Report distributions for $w_d$ and $t_j$, not only best values.
-3. Use simple, idealized Icepack flowline models to test worlds 1–4. Prescribe the transient forcing when possible, and keep age and isotope tracers Lagrangian or demonstrate convergence so that numerical diffusion is smaller than the observed width.
-4. Add thermomechanical feedback or basal hydrology only after a kinematic Icepack model passes the observational tests.
+3. Use simple two-dimensional full-Stokes models for the collision, basal-patch, and Ice-Wall worlds, while treating surface scour as a boundary-history problem. Prescribe the transient forcing when possible, and keep age and isotope tracers Lagrangian or demonstrate convergence so that numerical diffusion is smaller than the observed width.
+4. Add thermomechanical feedback or basal hydrology only after an idealized mechanical model passes the observational tests.
 
 A scenario passes the initial investigation if it satisfies all of the following:
 
@@ -102,7 +114,7 @@ A scenario passes the initial investigation if it satisfies all of the following
 - It predicts at least one independent sign test: continuation of the contact, a repeated or overturned sequence, a fold or shear zone, or wall-related layer geometry.
 - The conclusion is stable to a factor-of-two resolution change and to a documented parameter sweep over the uncertain inputs.
 
-The project succeeds when these tests rank the possible histories and identify the most discriminating next observation. A unique full-Stokes reconstruction is not required.
+The project succeeds when these tests rank the possible histories and identify the most discriminating next observation. A unique reconstruction of the Allan Hills geometry is not required.
 
 ## Starting literature
 
