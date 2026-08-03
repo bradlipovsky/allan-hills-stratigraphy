@@ -100,6 +100,8 @@ All three conclusions persist when both mesh dimensions are doubled, and their b
 
 The Waddington positive control verifies that this numerical framework can make the required structure. The same full-Stokes shear leaves initially flat layers unfolded but rotates a seeded 17° limb through vertical after 6.1 kyr. By 25 kyr, the best synthetic core contains a 5.20–0.91–5.20 Ma top-to-bottom triplet. The mechanical scales are plausible orders of magnitude, but the seed and nominal basal age compression are deliberately chosen to expose the mechanism rather than reconstruct Allan Hills.
 
+The [ALHIC1901 inverse-fit notebook](notebooks/alhic1901_full_stokes_fit.ipynb) takes the next step: it fits a compact, initially ordered basal wrinkle to the uploaded Shackleton et al. (2025) age data using velocity from a 160 m-thick full-Stokes slab. The target is the observed three-fold age–depth structure, not merely an arbitrary reversal. Its three modeled old-age peaks lie within 0.34 m of the data-defined peaks, with 0.38 Ma pointwise RMS age misfit and negligible factor-two mesh sensitivity. This is a qualified positive result: it requires an approximately 85° seed limb, so the visual match supplies a target for transient models rather than a unique or fully plausible reconstruction.
+
 ## Minimal modeling sequence and success metrics
 
 1. Assemble the measured ages, isotope profiles, sample-response length, core locations, contact orientation, ice thickness, bed and surface geometry, accumulation/ablation, and present velocity. Record uncertainties and do not interpolate across the contact.
