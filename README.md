@@ -94,8 +94,11 @@ Issue [#11](https://github.com/bradlipovsky/allan-hills-stratigraphy/issues/11) 
 | [Collision](notebooks/full_stokes_collision.ipynb) | Opposing side inflow for 30 yr; compensating stress-free surface outflow | $6.00\times10^{-2}$ yr$^{-1}$ | 0 overturned segments; no bracketed Pleistocene minimum |
 | [Traveling basal patch](notebooks/full_stokes_basal_patch.ipynb) | 8 km low-drag Robin patch; 600 yr in a frame moving at 40 m yr$^{-1}$ | $2.98\times10^{-3}$ yr$^{-1}$ | 0 overturned segments; no bracketed Pleistocene minimum |
 | [Migrating Ice Wall](notebooks/full_stokes_ice_wall.ipynb) | 200 m surface step; 1 km of relative migration over 100 kyr | $6.62\times10^{-6}$ yr$^{-1}$ in the wall zone | 0 overturned segments; no bracketed Pleistocene minimum |
+| [Waddington positive control](notebooks/full_stokes_waddington_fold.ipynb) | A 25 m-amplitude, 500 m-wavelength seed wrinkle; 25 kyr of gravity-driven shear | $5.40\times10^{-4}$ yr$^{-1}$ | 6596 overturned segments; 6 bracketed Pleistocene minima |
 
 All three conclusions persist when both mesh dimensions are doubled, and their boundary mass-flux residuals are far below 1%. These are negative results for the stated smooth, linear-viscous end members—not proofs that the broader histories are impossible. In particular, the collision calculation requires a large compensating surface flux, the basal patch is prescribed rather than thermomechanically generated, and the Ice Wall is a fixed geometry viewed in a translating frame. The calculations nevertheless show that resolved depth-dependent shear alone does not produce the observed old–Pleistocene–older order: the forcing must first create a sufficiently steep material wrinkle, thrust, or unconformity for subsequent shear to overturn.
+
+The Waddington positive control verifies that this numerical framework can make the required structure. The same full-Stokes shear leaves initially flat layers unfolded but rotates a seeded 17° limb through vertical after 6.1 kyr. By 25 kyr, the best synthetic core contains a 5.20–0.91–5.20 Ma top-to-bottom triplet. The mechanical scales are plausible orders of magnitude, but the seed and nominal basal age compression are deliberately chosen to expose the mechanism rather than reconstruct Allan Hills.
 
 ## Minimal modeling sequence and success metrics
 
