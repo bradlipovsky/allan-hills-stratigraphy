@@ -73,6 +73,12 @@ The [coupled-initialization notebook](notebooks/coupled_initialization_histories
 
 This is a useful negative result for broad bed forcing: large vertical relief alone does not create a Waddington seed. The next calculation should test narrower forcing, for which relief produces larger layer slope, while establishing time-step and mesh convergence and extending the robust post-event integration.
 
+## Static asymmetric bed-obstacle baseline
+
+The executed [`asymmetric_bed_obstacles.ipynb`](notebooks/asymmetric_bed_obstacles.ipynb) tests five fixed no-slip obstacles for 25 kyr in the transient free-surface Full-Stokes model. Material lines begin horizontal on the flat bed upstream, and their deformation-gradient tensors are integrated without remapping. The controls are a 0.1-thickness symmetric bump, a 0.5-thickness symmetric bump, both orientations of a 0.5-thickness asymmetric bump, and a 0.5-thickness asymmetric pit. The large obstacles have maximum bed slopes of 51--68°.
+
+No material tangent overturns. At initial core depths of 140--153 m, the asymmetric pit gives the largest rotation, 33.8°. The steep-upstream asymmetric bump reaches 43.9° at higher levels but only 4.4° in the target-depth layers; reversing it reduces the all-layer maximum to 8.8°. The maximum volume residual among the cases is $5.58\times10^{-5}$, and every tracked particle remains at least 4.5 m above the represented bed. Size, sign, and orientation therefore change the generated rumple, but static obstacle flow does not produce an ALHIC1901 fold in this baseline.
+
 ## Existing notebooks
 
 The earlier notebooks remain in the repository as a record of model development. In particular, the original unified notebooks imposed a fitted basal packet and sharp interior boundary; their apparent matches are not evidence for the present mechanical hypothesis. The relevant positive control is [`full_stokes_waddington_fold.ipynb`](notebooks/full_stokes_waddington_fold.ipynb), which shows that resolved Glen flow can overturn a sufficiently steep prescribed seed. The next step is to create that seed dynamically in the transient free-surface model defined here.
