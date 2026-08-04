@@ -2,16 +2,12 @@
 
 This project tests the conditions under which a transient, two-dimensional, free-surface Full-Stokes model with Glen-type rheology generates the stratigraphic inversions measured by [Shackleton et al. (2025)](https://doi.org/10.1073/pnas.2502681122) in the Allan Hills core ALHIC1901.
 
-The target is specific. ALHIC1901 contains three resolved age reversals in the bottom approximately 20 m of its 160 m ice column. Near the cul-de-sac contact, approximately 5 Ma ice lies above Pleistocene ice, with older ice below. The sharp water-isotope transition further suggests that the final juxtaposition occurred no more than a few tens of thousands of years ago. A successful model must reproduce this vertical order and timing; lateral adjacency is insufficient.
-
 ## Mechanical hypothesis
 
 The working hypothesis has two stages.
 
 1. A transient event creates steep but initially ordered isochrons. Candidate events are spatially variable sublimation or accumulation acting through an evolving free surface, and deformation over changing or uplifted bed topography.
-2. Subsequent compression and depth-dependent shear rotate these rumples into recumbent folds. This later deformation must bring Pleistocene and old ice into direct contact recently enough to satisfy the diffusion constraint.
-
-A pre-Pleistocene event may create the seed geometry, but it cannot create the final old–Pleistocene contact because the young ice did not yet exist. The model must therefore track both seed formation and the later juxtaposition.
+2. Subsequent compression and depth-dependent shear rotate these rumples into recumbent folds. 
 
 ## Model
 
