@@ -294,6 +294,7 @@ For equations:
 - Explain the limiting case in prose.
 - State whether a criterion is empirical, analytical, numerical, or assumed.
 - Give the physical meaning of nondimensional groups.
+- When delimiters are nested, order them from outermost to innermost as `\{ [ ( ) ] \}`. Use square brackets for column vectors and matrices, and parentheses for function arguments.
 - Use appendices for derivations that would interrupt the main argument.
 
 ## Citations
