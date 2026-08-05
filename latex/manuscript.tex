@@ -1,585 +1,964 @@
-\documentclass[11pt]{article}
+% The official International Glaciological Society class is not installed in
+% this execution environment. This review-format source follows Journal of
+% Glaciology conventions (author-year citations, numbered equations, SI units,
+% line numbers, and an abstract below 200 words). Replace `article' with the
+% current IGS class at submission if required by the journal.
+\documentclass[12pt]{article}
 
-\usepackage[margin=1in]{geometry}
+\usepackage[a4paper,margin=25mm]{geometry}
 \usepackage[T1]{fontenc}
 \usepackage[utf8]{inputenc}
-\usepackage{lmodern}
+\usepackage{amsthm}
+\usepackage{newtxtext,newtxmath}
 \usepackage{microtype}
-\usepackage{amsmath,amssymb,amsfonts,bm,mathtools}
-\usepackage{booktabs}
+\usepackage[english]{babel}
+\usepackage{csquotes}
+\usepackage{amsmath,mathtools,bm}
+\usepackage{booktabs,tabularx,array}
 \usepackage{siunitx}
-\usepackage{natbib}
-\usepackage{xcolor}
-\usepackage{hyperref}
-\usepackage{lineno}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta,calc,patterns,positioning}
+\usepackage[mathlines]{lineno}
+\usepackage{setspace}
 \usepackage{enumitem}
+\usepackage{xurl}
+\usepackage[
+  backend=biber,
+  style=authoryear,
+  sorting=nyt,
+  maxcitenames=2,
+  maxbibnames=99,
+  giveninits=true,
+  uniquename=false,
+  doi=true,
+  url=false,
+  isbn=false,
+  eprint=false
+]{biblatex}
+\addbibresource{references.bib}
 
-\hypersetup{colorlinks=true,citecolor=blue,linkcolor=blue,urlcolor=blue}
-\sisetup{detect-all}
-\linenumbers
+\DeclareDelimFormat{nameyeardelim}{\addcomma\space}
+\DeclareFieldFormat[article]{title}{#1}
+\DefineBibliographyStrings{english}{andothers={and others}}
+\AtEveryBibitem{\clearfield{month}\clearfield{day}\clearfield{urldate}}
+\AtBeginBibliography{\small\raggedright\setlength{\emergencystretch}{2em}}
 
-\newcommand{\dd}{\mathrm{d}}
+\sisetup{detect-all,range-phrase=--,range-units=single}
+\onehalfspacing
+\setlength{\emergencystretch}{2em}
+\modulolinenumbers[5]
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{corollary}{Corollary}
+\newtheorem{proposition}{Proposition}
+\theoremstyle{definition}
+\newtheorem{definition}{Definition}
+\theoremstyle{remark}
+\newtheorem{remark}{Remark}
+
+\newcommand{\dd}{\mathop{}\!\mathrm{d}}
 \newcommand{\Dt}{\frac{\mathrm{D}}{\mathrm{D}t}}
-\newcommand{\tr}{\operatorname{tr}}
-\newcommand{\sgn}{\operatorname{sgn}}
-\newcommand{\Id}{\bm{I}}
-\newcommand{\vel}{\bm{u}}
-\newcommand{\pos}{\bm{r}}
-\newcommand{\Tvec}{\bm{T}}
-\newcommand{\Kvec}{\bm{K}}
-\newcommand{\pvec}{\bm{p}}
-\newcommand{\nvec}{\bm{n}}
-\newcommand{\Lten}{\bm{L}}
+\newcommand{\p}{\partial}
+\newcommand{\Rpos}{\mathcal{P}}
+\newcommand{\Rneg}{\mathcal{R}}
+\newcommand{\Jord}{\mathcal{J}}
+\newcommand{\Ggrav}{\mathcal{G}}
+\newcommand{\Gfs}{\mathcal{F}}
+\newcommand{\I}{\bm{I}}
+\newcommand{\uvec}{\bm{u}}
+\newcommand{\xvec}{\bm{x}}
+\newcommand{\sig}{\bm{\sigma}}
+\newcommand{\taut}{\bm{\tau}}
 \newcommand{\Dten}{\bm{D}}
-\newcommand{\Ften}{\bm{F}}
-\newcommand{\Jten}{\bm{J}}
-\newcommand{\Hten}{\bm{H}}
-\newcommand{\eps}{\varepsilon}
-\newcommand{\todo}[1]{\textcolor{red}{[TODO: #1]}}
+\newcommand{\nvec}{\bm{n}}
+\newcommand{\orderfactor}{\mathcal{B}}
+\newcommand{\negpart}[1]{\left[#1\right]_{-}}
 
-\title{From Local Wrinkle Criteria to Finite-Width Fold Growth in Glacier Stratigraphy}
-\author{Brad P. Lipovsky\\
+\title{\textbf{When can steady glacier flow overturn isochrones?}\\
+\large A cumulative reverse-shear criterion for full-Stokes flow}
+\author{Bradley Paul Lipovsky\\
 \small Department of Earth and Space Sciences, University of Washington, Seattle, Washington, USA\\
-\small Correspondence: \texttt{bradlip@uw.edu}}
+\small Correspondence: \texttt{bpl7@uw.edu}}
 \date{}
 
 \begin{document}
 \maketitle
+\linenumbers
 
 \begin{abstract}
-Stratigraphic folding limits the fidelity of ice-core climate records and records otherwise inaccessible changes in glacier flow. This tension is especially acute in the Allan Hills Blue Ice Area, East Antarctica, where shallow cores contain ice and air extending from the Pleistocene into the Pliocene and Miocene, yet exhibit strong thinning, age discontinuities, and folding. Existing theory for passive folding in ice sheets was established by Waddington, Bolzan and Alley (WBA), who derived a local criterion comparing the rotation of an infinitesimal layer disturbance with that of a steady reference isochrone. Subsequent work incorporated anisotropic rheology and finite strain along particle paths, but the fundamental diagnostic remains an orientation criterion for a zero-length tangent element. Here we formulate stratigraphic folding as the finite deformation of an entire material curve. We first show that the WBA criterion is the projective dynamics of the material-line equation and can be written as an eigendirection problem for the velocity-gradient tensor in a frame rotating with the reference isochrone. We then derive an exact evolution equation for the signed curvature $\kappa$ of a two-dimensional material layer. In incompressible flow,
+Ancient ice recovered by the Center for Oldest Ice Exploration from the Allan Hills extends into the Miocene, but steep layers, age reversals and small-scale folds complicate interpretation. Existing steady-flow theory shows that isochrones cannot overturn when horizontal speed increases upward. Full-Stokes flow over rough beds can nevertheless contain local extrusion, making that pointwise condition stronger than necessary. We derive a physical-coordinate signed order factor,
 \[
-\Dt\kappa=-3(\pvec\!\cdot\!\Dten\pvec)\kappa
-+\nvec\!\cdot\!\left[(\nabla\nabla\vel):(\pvec\otimes\pvec)\right],
+\Jord=\frac{u}{u_{s0}}\left[1+\dot a_0u_{s0}\int_{x_0}^{x}\frac{u_z}{u^3}\,\dd\xi\right]=-\dot a_0\tau_z.
 \]
-where $\pvec$ and $\nvec$ are the unit tangent and normal and $\Dten$ is the strain-rate tensor. Tangential compression amplifies existing curvature, whereas spatial variation of the velocity gradient creates curvature from an initially straight layer. Fold sharpening is diagnosed by $\kappa\Dt\kappa>0$, while overturning occurs when the horizontal projection of the material tangent changes sign. The framework distinguishes local rotation, finite-width curvature growth, passive finite-time amplification, and active rheological instability. It also provides a natural basis for testing whether traveling basal-traction or surface-ablation anomalies can generate the folded and discontinuous stratigraphy observed in blue-ice archives.
+Where layers remain ordered, \(\Jord\) is the reciprocal of the established vertical thinning function. Positive, zero and negative \(\Jord\) denote ordered, vertical and overturned stratigraphy. Splitting vertical shear into normal and reverse parts gives the necessary-and-sufficient condition \(\Rneg<1+\Rpos\): reverse shear must erase both depositional ordering and accumulated surface-fast shear. Full-Stokes mechanics gives no universal sign guarantee, although shallow-ice flow preserves order. We derive a full-Stokes residual threshold, sufficient bounds for non-stagnant localized obstacles, a first-order cancellation result for periodic roughness about plug flow and a trajectory diagnostic. The advance is an explicit cumulative shear budget and its mechanical consequences, rather than a new state variable or universal no-folding theorem.
 \end{abstract}
+
+\noindent\textbf{Keywords:} ice stratigraphy; recumbent folds; Allan Hills; COLDEX; full-Stokes flow; extrusion flow; age equation; blue ice
 
 \section{Introduction}
 
-Ice-sheet stratigraphy is both a climate archive and a deformation record. In the simplest setting, annual and climatic layers are deposited at the surface, advected into the ice, and progressively thinned by vertical compression. This ordered picture underpins the interpretation of deep ice cores and radar-derived age fields. Yet folded, overturned, and locally repeated layers are widespread in glacier ice, from millimetre-scale cloudy bands in cores to kilometre-scale internal-reflection structures in radar data \citep{Hudleston2015,Bons2016,Bons2025,Zhang2024}. Such structures create two complementary scientific problems. First, they can reorder or omit climatic intervals and therefore compromise chronology. Second, they retain information about transient basal traction, divide migration, anisotropy, and other dynamical processes that are weakly expressed at the present-day surface.
+The oldest ice can be the least stratigraphically simple. Antarctic blue-ice areas expose ancient glacier ice by combining surface mass loss with upward ice motion, thereby providing access to climatic intervals far older than those recovered from conventional vertical cores \parencite{Bintanja1999,Spaulding2012}. At the Allan Hills, shallow cores first yielded a stratigraphically disturbed section near \SI{1}{Ma} \parencite{Higgins2015}, then discontinuous atmospheric snapshots older than \SI{2}{Ma} \parencite{Yan2019}, and most recently Pliocene and Miocene ice and air with reported ages approaching \SI{6}{Ma} \parencite{Shackleton2025}. These discoveries are central to the Center for Oldest Ice Exploration (COLDEX) effort to reconstruct atmospheric composition and Antarctic climate beyond the continuous \SI{800}{ka} ice-core record.
 
-The paleoclimate stakes are particularly high in Antarctic blue-ice areas. Ablation and upward ice motion bring ancient ice close to the surface, permitting access to ice substantially older than the oldest continuous deep core \citep{WhillansCassidy1983,Bintanja1999,Spaulding2012}. At the Allan Hills, shallow cores have yielded atmospheric and temperature information near \SI{1}{Ma} \citep{Higgins2015}, discontinuous ice older than \SI{2}{Ma} \citep{Yan2019}, and recently dated Pliocene and Miocene ice extending to approximately \SI{6}{Ma} \citep{Shackleton2025}. These records now support reconstructions of greenhouse gases and ocean heat content over intervals previously accessible only through indirect marine and terrestrial proxies \citep{MarksPeterson2026,Shackleton2026}. Their interpretation, however, is inseparable from ice dynamics: the Allan Hills archive is strongly thinned, discontinuous, and locally folded, with age reversals over short core intervals \citep{Higgins2015,Hudak2026,Stoll2026}.
+The scientific opportunity is inseparable from a structural problem. Allan Hills ice is strongly thinned and locally out of order. The ALHIC1901 age--depth relation includes multiple reversals, while the deepest ice can represent very large time intervals per unit core length \parencite{Shackleton2025}. Three-dimensional electrical conductivity measurements resolve mean layer dips of approximately \(29^{\circ}\) and \(69^{\circ}\) in two recent Allan Hills cores \parencite{Kirkpatrick2025}. Microstructural observations from ALHIC1901 indicate pervasive simple shear, strongly elongated bubbles, crystal-orientation stripes, and centimetre-scale kink and z-folds \parencite{Stoll2026}. Radar and flow modelling independently show that the duration and continuity of the archive vary sharply across the blue-ice area and with basal geometry \parencite{Kehrl2018}. Deformation is therefore not a secondary correction to the paleoclimate record; it controls which ages are present, how they are ordered, and how much time a sample averages.
 
-A foundational theory for passive stratigraphic folding was developed by \citet{Waddington2001}, hereafter WBA. Their central question was local and kinematic: given a pre-existing disturbance in a material layer, does the ambient flow rotate the disturbance back toward the steady stratigraphy, or away from it toward overturning? Their answer was a critical-slope criterion governed by the ratio of shear to longitudinal deformation. The approach was extended to strongly anisotropic ice \citep{ThorsteinssonWaddington2002}, to finite deformation along particle paths \citep{JacobsonWaddington2004}, and to folds generated by unsteady divide migration \citep{JacobsonWaddington2005}. Related work has demonstrated that traveling basal-slip anomalies can produce thickness-scale folds \citep{Wolovick2014,WolovickCreyts2016} and that anisotropy and convergent flow can produce large-amplitude fold systems \citep{Bons2016,Zhang2024}.
+A basic unresolved question is whether a fixed bed obstacle in an otherwise steady glacier can create the finite-amplitude disturbance required for a recumbent fold. Flow over topography certainly bends internal layers. Full mechanical calculations predict draping over long-wavelength topography and overriding of shorter-wavelength relief \parencite{Hindmarsh2006}. Rough-bed Stokes solutions can also contain local extrusion, meaning that horizontal speed increases downward over part of the ice column \parencite{Gudmundsson1997linear,Waddington2010}. At larger bed slopes, separated secondary circulation is possible even in creeping flow \parencite{Gudmundsson1997nonlinear}. These results appear, at first sight, to undermine the common intuition that a steady obstacle can produce only a standing layer disturbance rather than a recumbent fold.
 
-The WBA framework is powerful because it isolates the competition between shear-driven rotation and extension-driven flattening. Its limitation is equally clear: a finite-width fold is represented only through the orientation of an infinitesimal tangent segment. The criterion does not directly contain fold amplitude, wavelength, curvature, or the spatial variation of deformation across the two limbs of a fold. These omissions do not invalidate the local theory, but they obscure the distinction between four questions:
-\begin{enumerate}[leftmargin=*]
-    \item Does one tangent rotate away from a reference isochrone?
-    \item Does an entire finite-width wrinkle sharpen or flatten?
-    \item Does the wrinkle overturn and reverse stratigraphic order along a sampling line?
-    \item Does an infinitesimal perturbation actively grow through feedback on the velocity field?
+The apparent contradiction reflects three distinct concepts. A fixed obstacle can generate \emph{curvature}; local extrusion can rotate a material tangent in the sense favorable for overturning; and yet an isochrone can remain globally ordered. Recumbent folding requires a stronger event: particles deposited in an ordered sequence must reverse their horizontal order along an equal-age surface. Curvature, tangent rotation and order reversal are not equivalent.
+
+The local theory of \textcite{Waddington2001}, hereafter WBA, formalized how a pre-existing wrinkle is flattened by longitudinal extension or overturned by shear. WBA also stated the key qualitative principle that layers spending their entire history in a steady-state flow field are not passively folded; a transient process must first create a disturbance relative to the steady stratigraphy. \textcite{JacobsonWaddington2004} replaced the local criterion with finite-strain integration along trajectories, and \textcite{JacobsonWaddington2005} showed that divide migration can place an inherited Raymond arch in a shear regime that turns it into a recumbent fold. For steady stratigraphy, \textcite{ParreninHindmarshRemy2006} introduced logarithmic flux coordinates for analytical age solutions, and \textcite{ParreninHindmarsh2007} generalized the construction to horizontally non-uniform velocity profiles. Their Appendix A showed that an isochrone cannot pass through vertical when horizontal velocity increases monotonically upward. The same characteristic framework subsequently underpinned numerical age solvers \parencite{HindmarshLeysingerVieliParrenin2009,ParreninChungMartin2025} and an explicit vertical thinning function \parencite{Parrenin2013,ParreninChungMartin2025}.
+
+The monotonic-shear condition is powerful but unnecessarily restrictive. Full-Stokes glacier flow does not impose \(u_z\geq0\) pointwise. The correct question is therefore cumulative: how much reverse shear can a particle experience before the depositional ordering of the isochrone is lost? This paper answers that question for steady two-dimensional flow. We:
+
+\begin{enumerate}[leftmargin=*,label=(\roman*)]
+  \item derive a physical-coordinate representation of the signed inverse vertical-thinning factor and its interpretation as horizontal order along an isochrone;
+  \item express its sign as a cumulative competition between surface-fast and reverse vertical shear;
+  \item decompose the reverse-shear budget using the full-Stokes stress balance;
+  \item identify regimes in which ordinary glacier mechanics guarantees order and regimes in which it does not;
+  \item derive a sufficient no-overturning bound for localized obstacles and a first-order cancellation result for periodic small-amplitude roughness; and
+  \item formulate a direct trajectory diagnostic for full-Stokes models of Allan Hills and other old-ice sites.
 \end{enumerate}
 
-Here we develop a geometric generalization of WBA that answers the first three questions for passive stratigraphy in a prescribed flow. We formulate an isochrone as a material curve, derive exact tangent and curvature evolution equations, and identify separate conditions for curvature amplification and overturning. The local WBA result emerges as the orientation dynamics of the tangent equation. The finite-width correction enters through the spatial gradient of the velocity-gradient tensor, equivalently the velocity Hessian. We then outline a numerical program for applying the theory to traveling basal-traction and surface-mass-balance anomalies and to the complex flow geometry of the Allan Hills.
+The novelty is deliberately narrow. The monotonic-shear no-overturning result is due to \textcite{ParreninHindmarsh2007}; the order factor derived below is the reciprocal of the vertical thinning function developed by \textcite{Parrenin2013} and implemented by \textcite{ParreninChungMartin2025}; the local wrinkle criterion and finite-strain interpretation are due to WBA and \textcite{JacobsonWaddington2004}; and rough-bed extrusion is established \parencite{Gudmundsson1997linear}. The contribution here is to expose the sign of the inverse thinning factor as an exact positive--negative \(u_z/u^3\) shear budget and to use that budget to obtain a full-Stokes residual threshold, localized-obstacle bounds, a restricted periodic-cancellation result and a direct trajectory diagnostic. These are reformulations and extensions of established steady-isocrone theory, not claims of a new universal state variable or no-folding theorem.
 
-\section{Motivation from the Allan Hills old-ice archive}
+\section{Previous descriptions of stratigraphic folding}
 
-\subsection{Ancient ice in an ablation setting}
+\subsection{Passive and active folding}
 
-Blue-ice areas are mass-loss regions embedded within the broader accumulation zone of an ice sheet. Persistent wind scour and sublimation remove surface mass, while topographic obstruction and ice-flow convergence drive old ice upward toward the surface \citep{Bintanja1999,Spaulding2012}. The Allan Hills Blue Ice Area lies adjacent to the Transantarctic Mountains and contains several exposed ice fields separated by snow-covered accumulation zones. Geodetic measurements show slow horizontal motion and a resolvable upward component in the main ice field, providing the kinematic basis for surface exposure of ancient ice \citep{Spaulding2012}. Radar mapping and flowline modeling further indicate that the duration and continuity of the archive vary sharply with position and basal geometry \citep{Kehrl2018}.
+Glacier stratification is a material structure produced at the surface and subsequently deformed by flow. Structural glaciology distinguishes passive deformation, in which layers are markers that do not alter the velocity field, from active folding, in which rheological or anisotropic contrasts feed back on stress and motion \parencite{Hudleston2015,JenningsHambrey2021}. The distinction matters because a prescribed smooth velocity field can amplify or overturn an existing perturbation without selecting its wavelength, whereas active deformation can generate disturbances and select spatial scales.
 
-The scientific value of this archive has expanded rapidly. Horizontal and vertical cores first established the presence of climate records spanning approximately 90--250 ka \citep{Spaulding2013}. A later shallow core recovered a stratigraphically disturbed section near \SI{1}{Ma}, extending direct atmospheric measurements across the Mid-Pleistocene Transition \citep{Higgins2015}. Subsequent work recovered discontinuous ice older than \SI{2}{Ma} \citep{Yan2019}. More recent cores contain individually dated samples interpreted to extend through the Pliocene and into the Miocene, with maximum ages near \SI{6}{Ma} \citep{Shackleton2025}. These samples have enabled estimates of atmospheric greenhouse gases and mean ocean temperature over much of the past three million years \citep{MarksPeterson2026,Shackleton2026}.
+Microstructural folds in deep ice provide evidence for the active route. At GISP2, crystal-orientation stripes are associated with localized shear and grain-scale folding, and spatial variation in stripe density may create larger viscosity contrasts \parencite{Alley1997}. More recent numerical work shows that anisotropy and convergent flow can produce folds spanning scales from cloudy bands to radar reflectors \parencite{Bons2016,Bons2025,Zhang2024}. The analysis below concerns passive age transport in a prescribed velocity field. It supplies a necessary kinematic test for folding, not a dispersion relation for active instability.
 
-\subsection{Stratigraphic complexity as both limitation and signal}
+\subsection{The WBA local wrinkle criterion}
 
-The same flow processes that expose old ice also complicate the archive. Upward flow, strong cumulative thinning, spatially varying ablation, bedrock relief, and possible changes in basal traction can compress, truncate, and fold isochrones. In the Allan Hills cores, old ice is commonly present as discontinuous snapshots rather than a single monotonic age--depth sequence \citep{Yan2019,Shackleton2025}. High-resolution continuous-flow measurements reveal abrupt age discontinuities and folding, and suggest that the sampled climate-state distribution may be biased by differential preservation and deformation \citep{Hudak2026}. Microstructural observations additionally show complex fabrics and textures in million-year-old ice, raising the possibility that anisotropic deformation both records and modifies fold growth \citep{Stoll2026}.
-
-These observations motivate a theory that can be evaluated directly against core and radar geometry. A useful model should distinguish at least three mechanisms. First, a stationary ablation zone produces upward-bending layers that terminate at an erosional unconformity. Second, a traveling surface-ablation or basal-traction anomaly can phase-lock with ice at a particular depth and greatly increase residence time in a deforming region. Third, rheological anisotropy or layer-scale viscosity contrasts can generate an active folding instability with its own wavelength dependence. The WBA theory addresses passive rotation of an existing disturbance. The development below retains that insight while introducing the finite-width geometry needed to distinguish sharpening, overturning, and truncation.
-
-\section{Background: local theories of passive folding}
-
-\subsection{Material-line evolution}
-
-Consider a two-dimensional velocity field
-\[
-\vel(x,z,t)=\begin{pmatrix}u(x,z,t)\\w(x,z,t)\end{pmatrix},
-\qquad
-\Lten=\nabla\vel=
-\begin{pmatrix}
- u_x & u_z\\
- w_x & w_z
-\end{pmatrix}.
-\]
-Let $\delta\pos$ be an infinitesimal vector joining two neighboring material particles. A first-order Taylor expansion of the velocity gives the standard material-line equation
+Let \(m\) be the slope of an infinitesimal material-line segment in a two-dimensional velocity field \((u,w)\). WBA derived
 \begin{equation}
-\Dt\delta\pos=\Lten\,\delta\pos.
-\label{eq:material_line}
+\frac{\mathrm{D}m}{\mathrm{D}t}
+= w_x+(w_z-u_x)m-u_zm^2.
+\label{eq:wba}
 \end{equation}
-Equation~\eqref{eq:material_line} is general continuum kinematics rather than a glacier-specific constitutive result \citep{Batchelor1967,Ottino1989}. WBA used it to describe the local evolution of an isochrone segment.
+Equation~\eqref{eq:wba} is the Riccati form of the material-line equation and is standard continuum kinematics. WBA's distinctive step was to compare the rotation of a disturbed tangent with the rotation of the local steady isochrone tangent \(m_0\). A second equal-rotation direction separates disturbances that initially flatten toward \(m_0\) from those that rotate away from it. Their shear number expresses the competition between shear-driven rotation and longitudinal extension.
 
+Equation~\eqref{eq:wba} is local. Applied pointwise along a complete curve, it contains the exact tangent kinematics of that curve. The published WBA stability diagnostic, however, does not by itself determine whether an entire equal-age surface loses its horizontal ordering. WBA emphasized this limitation over rough topography: a disturbed tangent can open relative to the local steady isochrone on the lee side of a bump while merely recovering deformation accumulated on the stoss side \parencite{Waddington2001}.
+
+\subsection{Finite strain and steady isochrone geometry}
+
+\textcite{JacobsonWaddington2004} integrated finite deformation along particle paths rather than relying on a homogeneous instantaneous velocity gradient. This is the appropriate framework for deciding whether an inherited open fold becomes recumbent after a long and spatially variable strain history. Their later divide-migration calculation supplied a concrete source of the inherited perturbation \parencite{JacobsonWaddington2005}.
+
+A separate line of analysis concerns the geometry of isochrones generated continuously in a steady flow. \textcite{ParreninHindmarshRemy2006} introduced logarithmic total-flux and normalized-streamfunction coordinates in which particle trajectories are straight characteristics when the vertical velocity shape is horizontally uniform. \textcite{Hindmarsh2006} compared streamlines and isochrones over basal topography and showed that they are close when
+\begin{equation}
+\frac{\dot a}{U}\frac{L}{H}\ll1,
+\label{eq:hindmarshscale}
+\end{equation}
+where \(\dot a\) is accumulation, \(U\) a horizontal speed, \(L\) the forcing wavelength and \(H\) the ice thickness. \textcite{ParreninHindmarsh2007} generalized the characteristic analysis to horizontally non-uniform velocity profiles and wrote isochrone slope as an instantaneous normalized-streamfunction contribution plus a path-history term. In their notation, the sign of \(1-\alpha\) determines whether neighboring particles preserve their order, and \(\alpha>1\) corresponds to an isochrone that has passed through vertical. They proved that this cannot occur if horizontal velocity increases upward. \textcite{HindmarshLeysingerVieliParrenin2009} used these solutions to verify a large-scale numerical age model, and \textcite{ParreninChungMartin2025} recently implemented the same flux-coordinate framework for age, particle origin and vertical thinning.
+
+Table~\ref{tab:lineage} locates the present analysis within this literature.
+
+\begin{table}[t]
+\centering
+\caption{Relationship between established folding analyses and the present formulation.}
+\label{tab:lineage}
+\small
+\begin{tabularx}{\textwidth}{@{}>{\raggedright\arraybackslash}p{0.20\textwidth}>{\raggedright\arraybackslash}X>{\raggedright\arraybackslash}X@{}}
+\toprule
+Study & Primary question & Diagnostic and scope \\
+\midrule
+\textcite{Waddington2001} & Does a pre-existing local wrinkle flatten or rotate toward overturning? & Instantaneous tangent slope relative to a steady reference isochrone. \\
+\textcite{JacobsonWaddington2004} & Does a finite-strain history overturn an injected disturbance? & Deformation gradient integrated along trajectories. \\
+\textcite{ParreninHindmarshRemy2006,ParreninHindmarsh2007} & How does steady flow shape isochrones and preserve particle order? & Logarithmic flux coordinates, characteristic age solutions and a path factor; monotonic upward speed precludes vertical isochrones. \\
+\textcite{Hindmarsh2006} & Do layers drape or override bed and basal-boundary perturbations? & Perturbation and full-mechanical models; wavelength controls architecture. \\
+\textcite{HindmarshLeysingerVieliParrenin2009,ParreninChungMartin2025} & How can age and thinning be computed accurately in steady flow tubes? & Eulerian and characteristic solvers for age, origin and vertical thinning. \\
+\textcite{Gudmundsson1997linear} & Can rough-bed Stokes flow contain local extrusion? & Analytical velocity extrema and reverse vertical shear near sinusoidal relief. \\
+This study & Has cumulative reverse shear erased depositional ordering? & Signed inverse-thinning factor, positive--negative shear budget, full-Stokes threshold, obstacle bounds and trajectory diagnostic. \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\section{Steady age transport and the order Jacobian}
+
+\subsection{Setting and assumptions}
+
+Consider a steady two-dimensional glacier velocity
+\begin{equation}
+\uvec(x,z)=(u(x,z),w(x,z))
+\end{equation}
+in a domain bounded above by the steady surface \(z=s(x)\). The kinematic result requires only the following assumptions on the region and trajectories of interest:
+
+\begin{enumerate}[leftmargin=*,label=(A\arabic*)]
+  \item The velocity is continuously differentiable and incompressible,
+  \begin{equation}
+  u_x+w_z=0.
+  \label{eq:incompressible}
+  \end{equation}
+  \item Horizontal motion is one-way,
+  \begin{equation}
+  u(x,z)>0,
+  \label{eq:oneway}
+  \end{equation}
+  after orienting \(x\) downstream.
+  \item Every trajectory considered enters the ice through a unique accumulating branch of the surface. The surface accumulation rate, expressed in vertical ice-equivalent units, satisfies \(\dot a(x)>0\) on that branch.
+  \item Stratigraphic age is a passive, non-diffusive scalar. Its steady value \(\tau(x,z)\) satisfies
+  \begin{equation}
+  u\tau_x+w\tau_z=1,
+  \qquad \tau=0\quad\text{at deposition}.
+  \label{eq:age}
+  \end{equation}
+\end{enumerate}
+
+An impermeable bed is not required for the local result. Basal melting may terminate some trajectories without altering the derivation before termination. Basal freezing, in contrast, introduces a second material source and requires separate origin labels. Assumption (A2) excludes horizontal stagnation and closed circulation. Assumption (A3) requires special care in a blue-ice area because the local surface is an outlet; the material origin must instead be traced to an upstream inflow branch or another source.
+
+Because of Equation~\eqref{eq:incompressible}, there is a streamfunction \(\psi\) such that
+\begin{equation}
+ u=\psi_z,
+ \qquad
+ w=-\psi_x.
+ \label{eq:streamfunction}
+\end{equation}
+Combining Equations~\eqref{eq:age} and \eqref{eq:streamfunction} gives the exact Jacobian identity
+\begin{equation}
+\frac{\partial(\tau,\psi)}{\partial(x,z)}
+=\tau_x\psi_z-\tau_z\psi_x
+=u\tau_x+w\tau_z
+=1.
+\label{eq:agepsiJacobian}
+\end{equation}
+Thus age and streamfunction form local area-preserving coordinates. Isochrones and streamlines intersect transversely wherever the assumptions hold. This is a classical flow-coordinate construction; it is useful here because its inverse directly measures stratigraphic order.
+
+\begin{figure}[t]
+\centering
+\begin{tikzpicture}[x=1cm,y=1cm,>=Latex]
+  % domain
+  \draw[thick] (0,4.2) .. controls (3,4.1) and (7,3.7) .. (11,3.5) node[right] {surface $s(x)$};
+  \draw[thick] (0,0.5) .. controls (2,0.45) and (3.4,0.55) .. (4.5,0.8)
+    .. controls (5.2,1.4) and (5.8,1.45) .. (6.6,0.85)
+    .. controls (7.4,0.45) and (9.5,0.45) .. (11,0.35) node[right] {bed};
+  % accumulation arrows
+  \foreach \x in {0.8,1.8,2.8,3.8} {
+    \draw[->] (\x,4.8) -- (\x,4.25);
+  }
+  \node at (2.3,5.05) {$\dot a>0$};
+  % streamline
+  \draw[->,very thick] (0.5,3.95) .. controls (3.1,3.2) and (4.6,2.0) .. (5.5,1.65)
+      .. controls (7.0,1.25) and (8.9,1.4) .. (10.5,1.1);
+  \node[above] at (7.8,1.45) {streamline $\psi$};
+  % isochrones
+  \draw[dashed,thick] (0.3,3.35) .. controls (3.2,3.0) and (5.0,2.65) .. (6.2,2.55)
+    .. controls (7.6,2.42) and (9.3,2.45) .. (10.7,2.2);
+  \draw[dashed,thick] (0.3,2.75) .. controls (3.1,2.55) and (4.7,2.1) .. (5.7,1.92)
+    .. controls (7.3,1.72) and (9.1,1.95) .. (10.7,1.62);
+  \node[right] at (10.7,2.2) {isochrone $\tau$};
+  % positions and axes
+  \draw[dotted] (1.25,4.15) -- (1.25,3.72);
+  \node[above] at (1.25,4.2) {$x_0(\psi)$};
+  \fill (8.8,1.35) circle (1.5pt);
+  \draw[dotted] (8.8,1.35) -- (8.8,0.45);
+  \node[below] at (8.8,0.42) {$x$};
+  \draw[->] (-0.25,0.25) -- (1.1,0.25) node[right] {$x$};
+  \draw[->] (-0.25,0.25) -- (-0.25,1.55) node[above] {$z$};
+\end{tikzpicture}
+\caption{Steady plane-flow geometry. Each streamline considered here enters through a unique accumulating surface point \(x_0(\psi)\). The order Jacobian compares the downstream positions, at equal age, of particles deposited at neighboring values of \(x_0\). A bed obstacle may curve isochrones without reversing their horizontal order.}
+\label{fig:geometry}
+\end{figure}
+
+\subsection{Surface origin and travel time}
+
+The streamfunction restricted to the surface is
+\begin{equation}
+Q(x)=\psi(x,s(x)).
+\end{equation}
+The steady surface kinematic condition is
+\begin{equation}
+ u_s s_x-w_s=\dot a,
+\label{eq:surfacekinematic}
+\end{equation}
+where the subscript \(s\) denotes evaluation at the surface. Therefore
+\begin{equation}
+Q'(x)=\psi_x+\psi_zs_x=-w_s+u_ss_x=\dot a(x)>0.
+\label{eq:Qprime}
+\end{equation}
+Every streamline label \(\psi\) has a unique deposition position \(x_0(\psi)\) satisfying
+\begin{equation}
+Q(x_0)=\psi,
+\qquad
+\frac{\dd x_0}{\dd\psi}=\frac{1}{\dot a_0},
+\label{eq:x0psi}
+\end{equation}
+where \(\dot a_0=\dot a(x_0)\).
+
+At fixed \(\psi\), Equation~\eqref{eq:age} gives
+\begin{equation}
+\left.\frac{\partial\tau}{\partial x}\right|_{\psi}=\frac{1}{u}.
+\end{equation}
+Consequently the age at \((x,\psi)\) is the travel time from deposition,
+\begin{equation}
+\tau(x,\psi)=\int_{x_0(\psi)}^{x}
+\frac{\dd\xi}{u\bigl(\xi,z(\xi,\psi)\bigr)}.
+\label{eq:traveltime}
+\end{equation}
+At fixed \(x\), Equation~\eqref{eq:streamfunction} implies
+\begin{equation}
+ z_{\psi}=\frac{1}{u}.
+\label{eq:zpsi}
+\end{equation}
+Differentiating Equation~\eqref{eq:traveltime} with respect to \(\psi\), using Equations~\eqref{eq:x0psi} and \eqref{eq:zpsi}, yields
+\begin{equation}
+\tau_{\psi}
+=-\frac{1}{\dot a_0u_{s0}}
+-\int_{x_0}^{x}\frac{u_z}{u^3}\,\dd\xi,
+\label{eq:taupsi}
+\end{equation}
+where \(u_{s0}=u(x_0,s(x_0))\). The first term records the separation imposed at deposition; the integral records the subsequent differential travel time between neighboring streamlines.
+
+\subsection{Exact order theorem}
+
+Parameterize an isochrone of fixed age by the surface deposition coordinate \(x_0\). The relevant quantity is not its curvature but the horizontal projection of its tangent.
+
+\begin{definition}[Isochrone-order Jacobian]
+The isochrone-order Jacobian is
+\begin{equation}
+\Jord(x,x_0)
+=\left.\frac{\partial x}{\partial x_0}\right|_{\tau}.
+\label{eq:Jdefinition}
+\end{equation}
+It measures whether particles deposited in increasing order of \(x_0\) remain in increasing downstream order on an equal-age surface.
+\end{definition}
+
+\begin{theorem}[Cumulative order criterion]
+Under assumptions (A1)--(A4), the isochrone-order Jacobian is
+\begin{equation}
+\boxed{
+\Jord
+=\frac{u(x,z)}{u_{s0}}
+\left[
+1+\dot a_0u_{s0}
+\int_{x_0}^{x}\frac{u_z}{u^3}\,\dd\xi
+\right].
+}
+\label{eq:Jexact}
+\end{equation}
+It is also related exactly to the vertical age gradient by
+\begin{equation}
+\boxed{\Jord=-\dot a_0\tau_z.}
+\label{eq:Jage}
+\end{equation}
+Hence \(\Jord>0\) denotes ordered stratigraphy, \(\Jord=0\) a vertical tangent, and \(\Jord<0\) an overturned limb.
+\end{theorem}
+
+\begin{proof}
+At fixed age, differentiation of \(\tau(x,\psi)\) gives
+\begin{equation}
+\left.\frac{\partial x}{\partial\psi}\right|_{\tau}
+=-\frac{\tau_{\psi}}{\tau_x|_{\psi}}
+=-u\tau_{\psi}.
+\end{equation}
+Multiplication by \(\dd\psi/\dd x_0=\dot a_0\) and substitution of Equation~\eqref{eq:taupsi} gives Equation~\eqref{eq:Jexact}. At fixed \(x\), \(\tau_z=\tau_{\psi}\psi_z=u\tau_{\psi}\), which gives Equation~\eqref{eq:Jage}.
+\end{proof}
+
+The vertical thinning function \(\lambda_z\) is conventionally the present vertical thickness of an infinitesimal age layer divided by its ice-equivalent thickness at deposition. For an ordered layer, a positive age increment \(\dd\tau\) corresponds to the present vertical thickness \(-\dd z=-\dd\tau/\tau_z\) and the initial thickness \(\dot a_0\dd\tau\). Hence
+\begin{equation}
+\boxed{
+\lambda_z
+=-\frac{1}{\dot a_0\tau_z}
+=\Jord^{-1},
+\qquad \Jord>0.
+}
+\label{eq:thinningrelation}
+\end{equation}
+Thus \(\Jord\) is not a new independent state variable: in the ordered regime it is the inverse of the established vertical thinning function \parencite{Parrenin2013,ParreninChungMartin2025}. Equation~\eqref{eq:Jage} provides its signed continuation through a vertical tangent. The standard positive thinning function diverges as \(\tau_z\rightarrow0\), whereas \(\Jord\) crosses zero regularly and records orientation reversal.
+
+At deposition, \(x=x_0\), \(u=u_{s0}\), and \(\Jord=1\). At the first vertical tangent, \(\tau_z=0\), but the material curve remains regular. Inverting Equation~\eqref{eq:agepsiJacobian} shows that
+\begin{equation}
+\left.\frac{\partial z}{\partial x_0}\right|_{\tau}
+=\dot a_0\tau_x.
+\end{equation}
+When \(\Jord=0\), Equation~\eqref{eq:age} gives \(\tau_x=1/u\), and therefore
+\begin{equation}
+\left.\frac{\partial z}{\partial x_0}\right|_{\tau,\Jord=0}
+=\frac{\dot a_0}{u}>0.
+\end{equation}
+The divergence of the conventional slope \(m=\dd z/\dd x\) at overturning is therefore a coordinate singularity, not a singularity of the layer itself.
+
+\subsection{Positive and reverse shear budgets}
+
+Define
+\begin{equation}
+ u_z^+=\max(u_z,0),
+ \qquad
+ u_z^-=\max(-u_z,0),
+\end{equation}
+and the dimensionless cumulative contributions
+\begin{align}
+\Rpos(x,x_0)
+&=\dot a_0u_{s0}
+\int_{x_0}^{x}\frac{u_z^+}{u^3}\,\dd\xi,
+\label{eq:Pdef}\\
+\Rneg(x,x_0)
+&=\dot a_0u_{s0}
+\int_{x_0}^{x}\frac{u_z^-}{u^3}\,\dd\xi.
+\label{eq:Rdef}
+\end{align}
+Equation~\eqref{eq:Jexact} becomes
+\begin{equation}
+\boxed{
+\Jord=\frac{u}{u_{s0}}\left(1+\Rpos-\Rneg\right).
+}
+\label{eq:JPR}
+\end{equation}
+Because \(u/u_{s0}>0\), the necessary-and-sufficient condition for preservation of horizontal order is
+\begin{equation}
+\boxed{\Rneg<1+\Rpos.}
+\label{eq:ordercondition}
+\end{equation}
+The first vertical tangent occurs at
+\begin{equation}
+\boxed{\Rneg=1+\Rpos,}
+\label{eq:verticalcondition}
+\end{equation}
+and overturning occurs when \(\Rneg>1+\Rpos\).
+
+The unit term in Equations~\eqref{eq:JPR}--\eqref{eq:verticalcondition} is the finite initial ordering imposed at deposition. Positive \(u_z\), the usual surface-fast glacier profile, strengthens that ordering. Reverse shear must overcome both. Thus a local region with \(u_z<0\) is not itself a fold criterion.
+
+In travel-time coordinates, \(\dd x=u\,\dd t\), so
+\begin{equation}
+\Rneg
+=\dot a_0u_{s0}
+\int_0^T\frac{u_z^-}{u^2}\,\dd t.
+\label{eq:Rtime}
+\end{equation}
+Reverse shear is amplified by residence time and by slow horizontal motion. This weighting explains why local extrusion in fast throughflow may be harmless, while modest reverse shear near stagnation can dominate the order budget.
+
+\begin{corollary}[Monotonic-shear result]
+If \(u_z\geq0\) everywhere along a trajectory, then \(\Rneg=0\), \(\Jord>0\), and the steady isochrone cannot overturn.
+\end{corollary}
+
+This corollary is the physical-coordinate statement of the no-overturning result in Appendix A of \textcite{ParreninHindmarsh2007}. It is sufficient, not necessary. Equation~\eqref{eq:ordercondition} permits finite intervals of reverse shear provided their cumulative weighted contribution remains subcritical.
+
+\begin{figure}[t]
+\centering
+\begin{tikzpicture}[x=1.08cm,y=1.15cm,>=Latex]
+  \draw[->] (0,0) -- (9.2,0) node[right] {distance or travel time};
+  \draw[->] (0,-1.5) -- (0,3.4) node[above] {$\orderfactor=1+\Rpos-\Rneg$};
+  \draw[dashed] (0,0.0) -- (9,0.0);
+  \node[left] at (0,0) {$0$};
+  \draw[very thick] (0,2.4) .. controls (2.0,2.75) and (3.0,2.1) .. (4.2,1.65)
+    .. controls (5.3,1.2) and (5.8,0.25) .. (6.2,0)
+    .. controls (6.8,-0.45) and (7.7,-0.9) .. (8.8,-1.15);
+  \draw[dotted] (6.2,-1.35) -- (6.2,3.0);
+  \node[right] at (6.28,2.35) {$\Rneg=1+\Rpos$};
+  \node[align=center] at (2.2,0.65) {ordered\\$\Jord>0$};
+  \node[align=center] at (7.8,-0.35) {overturned\\$\Jord<0$};
+  \node[rotate=90,anchor=south] at (6.2,0.05) {first vertical tangent};
+  \draw[->,thin] (1.45,2.52) -- (1.25,2.43);
+  \node[above] at (1.45,2.52) {normal shear};
+  \draw[->,thin] (4.55,2.70) -- (5.15,1.05);
+  \node[above,align=center] at (4.45,2.76) {cumulative\\reverse shear};
+\end{tikzpicture}
+\caption{Conceptual order budget. The sign of \(\orderfactor=1+\Rpos-\Rneg\) is the sign of the order Jacobian. Local reverse shear need not cause overturning; a vertical tangent appears only after the cumulative reverse-shear budget reaches the unit depositional margin plus accumulated normal shear.}
+\label{fig:budget}
+\end{figure}
+
+\subsection{Relation to the Parrenin--Hindmarsh path factor}
+
+\textcite{ParreninHindmarsh2007} used a normalized streamfunction and logarithmic flux coordinates. For two neighboring particles, their Appendix A gives a mapping of the form
+\begin{equation}
+\delta\pi=(1-\alpha)\,\delta\pi_0,
+\end{equation}
+where \(\alpha>1\) corresponds to an isochrone exceeding vertical. Their present and surface-origin coordinates are monotone functions of \(x\) and \(x_0\) wherever assumptions (A2)--(A3) hold. Consequently,
+\begin{equation}
+\operatorname{sgn}(1-\alpha)
+=\operatorname{sgn}\left(
+\left.\frac{\partial x}{\partial x_0}\right|_{\tau}
+\right)
+=\operatorname{sgn}(\Jord)
+=\operatorname{sgn}(-\tau_z).
+\label{eq:PHsign}
+\end{equation}
+The present result is therefore not an independent no-overturning theorem. Nor is \(\Jord\) independent of the established thinning variable: Equation~\eqref{eq:thinningrelation} identifies it as the signed inverse vertical-thinning factor. The contribution of the physical-space representation is that it exposes the positive and negative parts of vertical shear, remains regular at the first vertical tangent and can be evaluated directly from a numerical velocity field. The current \texttt{age\_flow\_line} formulation assumes strictly positive accumulation for its horizontal flux coordinate and no reverse horizontal flow for its vertical flux coordinate; it computes age and positive vertical thinning within that admissible regime \parencite{ParreninChungMartin2025}.
+
+\section{What does full-Stokes mechanics imply?}
+
+\subsection{Exact stress decomposition of vertical shear}
+
+The order theorem is kinematic. We now ask whether ordinary glacier mechanics forces Equation~\eqref{eq:ordercondition} to hold. Consider steady, isothermal or thermomechanically prescribed, isotropic generalized-Newtonian Stokes flow,
+\begin{align}
+\nabla\cdot\uvec&=0,
+\label{eq:mass}\\
+-\nabla p+\nabla\cdot\taut+\rho\bm{g}&=\bm{0},
+\label{eq:momentum}\\
+\taut&=2\eta\Dten,
+\qquad
+\Dten=\tfrac12\left(\nabla\uvec+\nabla\uvec^{\mathsf T}\right),
+\qquad \eta>0.
+\label{eq:rheology}
+\end{align}
+The scalar viscosity \(\eta\) may depend on temperature and effective strain rate. Anisotropic rheology is discussed separately below.
+
+With \(z\) vertical and gravity having no horizontal component, the horizontal momentum equation is
+\begin{equation}
+-p_x+\tau_{xx,x}+\tau_{xz,z}=0.
+\label{eq:xmomentum}
+\end{equation}
 Write
-\[
-\delta\pos=\begin{pmatrix}\delta x\\\delta z\end{pmatrix},
-\qquad
-m=\frac{\delta z}{\delta x}.
-\]
-Applying the quotient rule to Equation~\eqref{eq:material_line} yields
 \begin{equation}
-\Dt m=w_x+(w_z-u_x)m-u_zm^2.
-\label{eq:riccati}
+p=p_{\mathrm{atm}}+\rho g(s-z)+p_{\mathrm{nh}},
 \end{equation}
-This is a Riccati equation: the apparently nonlinear slope dynamics are the projective representation of the linear vector equation~\eqref{eq:material_line}. The divergence of $m$ at a vertical tangent is a coordinate singularity; the material vector itself remains regular.
-
-If the segment angle is $\theta$, with unit tangent and normal
-\[
-\pvec=(\cos\theta,\sin\theta),
-\qquad
-\nvec=(-\sin\theta,\cos\theta),
-\]
-then its angular velocity is
+where \(p_{\mathrm{nh}}\) contains all nonhydrostatic pressure, including the finite-slope surface correction. Integrating Equation~\eqref{eq:xmomentum} downward from the free surface gives
 \begin{equation}
-\Dt\theta=\nvec\cdot\Lten\pvec.
-\label{eq:theta}
+\tau_{xz}(x,z)
+=\tau_{xz}^{s}
+-\rho g s_x(s-z)
++\int_z^s\left(\tau_{xx,x}-p_{\mathrm{nh},x}\right)\,\dd\zeta.
+\label{eq:tauxzint}
 \end{equation}
-The antisymmetric part of $\Lten$ contributes rigid-body rotation, while the symmetric part changes line orientation relative to the principal strain directions.
+Because \(\tau_{xz}=\eta(u_z+w_x)\),
+\begin{equation}
+\boxed{
+ u_z
+ =\underbrace{\frac{\rho g(s-z)(-s_x)}{\eta}}_{G}
+ +\underbrace{
+ \left[
+ -w_x+\frac{\tau_{xz}^{s}}{\eta}
+ +\frac{1}{\eta}\int_z^s
+ \left(\tau_{xx,x}-p_{\mathrm{nh},x}\right)\,\dd\zeta
+ \right]}_{R_{\mathrm{FS}}}.
+}
+\label{eq:uzdecomp}
+\end{equation}
+For a surface descending downstream, \(s_x\leq0\), the gravity-driven term \(G\) is nonnegative and favors order preservation. The residual \(R_{\mathrm{FS}}\) contains the full-Stokes effects omitted from the shallow-ice shear balance: gradients of vertical velocity, longitudinal stress, nonhydrostatic pressure and the Cartesian surface shear-stress component.
 
-\subsection{The WBA critical orientation}
+Substitution into Equation~\eqref{eq:Jexact} gives
+\begin{equation}
+\Jord=\frac{u}{u_{s0}}
+\left(1+\Ggrav+\Gfs\right),
+\label{eq:Jfullstokes}
+\end{equation}
+with
+\begin{align}
+\Ggrav&=\dot a_0u_{s0}
+\int_{x_0}^{x}\frac{G}{u^3}\,\dd\xi\geq0,
+\label{eq:Ggrav}\\
+\Gfs&=\dot a_0u_{s0}
+\int_{x_0}^{x}\frac{R_{\mathrm{FS}}}{u^3}\,\dd\xi.
+\label{eq:Gfs}
+\end{align}
+The exact full-Stokes failure condition is
+\begin{equation}
+\boxed{
+\Gfs\leq-\left(1+\Ggrav\right).
+}
+\label{eq:FSfailure}
+\end{equation}
+A conservative sufficient condition for no overturning is
+\begin{equation}
+\boxed{
+\dot a_0u_{s0}
+\int_{x_0}^{x}
+\frac{\negpart{R_{\mathrm{FS}}}}{u^3}\,\dd\xi<1.
+}
+\label{eq:FSsufficient}
+\end{equation}
+This inequality discards all positive contributions, including gravity-driven shear, and is therefore stronger than necessary but easy to test.
 
-Let $m_0(x,z)$ denote the slope of the steady reference isochrone passing through a spatial point. Steady does not imply that a material segment on that isochrone has zero angular velocity; a particle can rotate as it traverses a spatially curved but time-independent layer. WBA therefore compared the angular velocity of a disturbed segment with that of the local reference isochrone.
+\subsection{There is no universal full-Stokes sign theorem}
+
+Neither incompressibility nor the Stokes equations fixes the sign of \(u_z\). The constitutive relation constrains \(u_z+w_x\), while longitudinal stress and nonhydrostatic pressure can alter the Cartesian vertical gradient of horizontal speed. Analytical rough-bed solutions demonstrate local velocity maxima and minima, and therefore regions with \(u_z<0\), even for gravity-driven linear viscous flow \parencite{Gudmundsson1997linear}. The historical extrusion-flow literature likewise shows that surface-fast velocity profiles are not a pointwise theorem of full-Stokes mechanics \parencite{Waddington2010}.
+
+At stronger roughness, the one-way-flow assumption itself can fail. \textcite{Gudmundsson1997nonlinear} found separated secondary circulation in troughs of sufficiently steep sinusoidal beds. Ideal no-slip Stokes flow near a sharp corner can contain nested Moffatt eddies \parencite{Moffatt1964}. These examples are not direct models of Allan Hills: glacier beds may slide, Glen flow is nonlinear, and real corners are rounded. Their theoretical significance is that a steady creeping-flow equation does not forbid recirculation. When \(u=0\) or trajectories close, the downstream travel-time coordinate and unique surface-origin map cease to exist, so Equations~\eqref{eq:Jexact}--\eqref{eq:ordercondition} no longer apply globally.
+
+The distinction between local extrusion and cumulative order reversal is central. Published rough-bed solutions establish that \(u_z\) can be negative. They do not, by that fact alone, establish that \(\Rneg\) reaches \(1+\Rpos\). The latter is an order-one integrated threshold.
+
+\section{Regimes that preserve order}
+
+\subsection{Shallow-ice flow}
+
+Under the conventional shallow-ice approximation,
+\begin{equation}
+\tau_{xz}\simeq-\rho g(s-z)s_x.
+\label{eq:SIAstress}
+\end{equation}
+For downstream flow with \(s_x<0\), \(\tau_{xz}>0\). An isotropic Glen-type rheology gives \(u_z\) with the same sign as \(\tau_{xz}\), while leading-order basal sliding contributes a depth-independent horizontal speed \parencite{CuffeyPaterson2010}. Therefore
+\begin{equation}
+ u_z\geq0,
+ \qquad \Rneg=0,
+ \qquad \Jord>0.
+\label{eq:SIAorder}
+\end{equation}
+A fixed bed obstacle can produce arches, troughs and finite curvature in shallow-ice stratigraphy, but it cannot overturn a steady isochrone under these assumptions.
+
+\subsection{Regular thin-film full-Stokes flow}
 
 Let
-\[
-\omega(m)=\Dt\theta(m),
-\qquad
-\omega_0=\omega(m_0).
-\]
-The instantaneous relative angle is stationary when
 \begin{equation}
-\omega(m)=\omega_0.
-\label{eq:equal_rotation}
+\varepsilon=\frac{H}{L}\ll1
 \end{equation}
-One solution is trivially $m=m_0$. Because the equal-rotation equation is quadratic in $m$, a second solution generally exists. WBA identified this second orientation as a critical slope separating disturbances that rotate back toward the reference layer from those that rotate farther away. In the angle convention used here, its exact value is
+be the aspect ratio of a smooth glacier. Higher-order glacier models reproduce the Stokes solution to second order in \(\varepsilon\) under their regular asymptotic assumptions, including a range of basal slip regimes \parencite{Blatter1995,SchoofHindmarsh2010}. Suppose the non-shallow contribution scales as
 \begin{equation}
- m_{\mathrm{c}}=-\frac{u_x-w_z}{u_z+\omega_0}-m_0,
-\label{eq:mc}
+R_{\mathrm{FS}}=O\left(\varepsilon^2\frac{U}{H}\right)
+\label{eq:RFSscale}
 \end{equation}
-provided $u_z+\omega_0\neq0$. This is WBA's Equation~(6), noting that their clockwise-positive angle satisfies $\dot\theta_{0,\mathrm{WBA}}=-\omega_0$. Defining $\Delta m=m-m_0$, the exact critical disturbance is therefore
+through a region of length \(L=H/\varepsilon\), and suppose \(u\) remains comparable to \(U\). Then
 \begin{equation}
- \Delta m_{\mathrm{c}}=-\frac{u_x-w_z}{u_z+\omega_0}-2m_0.
-\label{eq:dmc_exact}
+\Gfs=O\left(\frac{\dot a}{U}\varepsilon\right).
+\label{eq:GFSscale}
 \end{equation}
-Near an ice divide, WBA assumed that the steady isochrone is gently sloping, so that $\omega_0\simeq w_x$. Their approximation becomes
+Thus small regular full-Stokes corrections cannot erase the unit depositional margin when
 \begin{equation}
- \Delta m_{\mathrm{c}}\simeq-\frac{u_x-w_z}{u_z+w_x}-2m_0.
-\label{eq:dmc}
+\frac{\dot a}{U}\varepsilon\ll1.
+\label{eq:thinorder}
 \end{equation}
+This is an asymptotic sufficient regime, not a uniform theorem. It can fail near divides, abrupt sliding transitions, contact zones, steep obstacles, very slow flow or other regions where the thin-film expansion is singular or nonuniform.
 
-WBA introduced the dimensionless shear number
-\begin{equation}
- S=\frac{u_z+w_x}{u_x-w_z}.
-\label{eq:shear_number}
-\end{equation}
-For two-dimensional incompressible flow, $u_x+w_z=0$, so
-\begin{equation}
- S=\frac{D_{xz}}{D_{xx}},
-\end{equation}
-where $\Dten=(\Lten+\Lten^{\mathsf T})/2$. Thus $S$ compares shear strain rate with longitudinal extension or compression. In WBA's near-horizontal approximation,
-\begin{equation}
-\Delta m_{\mathrm{c}}\simeq-S^{-1}-2m_0,
-\end{equation}
-and for $|m_0|\ll |S|^{-1}$ this further reduces to $\Delta m_{\mathrm{c}}\simeq-S^{-1}$. Strong shear therefore permits gentle disturbances to overturn, whereas strong extension requires an initially steep disturbance. We retain the term \emph{WBA shear number}; an unqualified eponym such as ``Waddington number'' would obscure the contributions of Bolzan and Alley and the established terminology.
+\subsection{A sufficient bound for a localized obstacle}
 
-\subsection{Eigenstructure of the WBA criterion}
+The cumulative criterion yields a direct obstacle bound without requiring pointwise monotonic shear.
 
-The WBA construction has a compact coordinate-free interpretation. Introduce the $90^{\circ}$ rotation tensor
-\[
-\Jten=\begin{pmatrix}0&-1\\1&0\end{pmatrix},
-\qquad
-\Jten\pvec=\nvec.
-\]
-Define the velocity-gradient tensor in a frame rotating with the reference isochrone,
+\begin{proposition}[Localized reverse-shear bound]
+Suppose reverse shear is confined to a trajectory segment of horizontal length \(\ell_-\). On that segment, assume
 \begin{equation}
-\bm{A}=\Lten-\omega_0\Jten.
-\label{eq:Arot}
+ u\geq rU,
+ \qquad
+ u_{s0}\leq r_sU,
+ \qquad
+ u_z^-\leq C\frac{U}{d},
+\label{eq:boundassumptions}
 \end{equation}
-Then
-\[
-\nvec\cdot\bm{A}\pvec=\omega(\pvec)-\omega_0.
-\]
-A direction has the same angular velocity as the reference isochrone precisely when $\bm{A}\pvec$ has no component normal to $\pvec$. Therefore
-\begin{equation}
-\bm{A}\pvec=\lambda\pvec.
-\label{eq:wba_eigen}
-\end{equation}
-The reference and critical orientations are the two eigendirections of $\bm{A}$. Under a locally constant-gradient approximation, if their eigenvalues are $\lambda_0$ and $\lambda_{\mathrm{c}}$, a small component along the critical direction evolves relative to the reference direction as
-\begin{equation}
-\epsilon(t)\sim\epsilon(0)\exp\left[(\lambda_{\mathrm{c}}-\lambda_0)t\right].
-\label{eq:eigengap}
-\end{equation}
-The eigendirections define the local orientation phase portrait, while the eigenvalue gap determines attraction toward or repulsion from the reference direction. Equation~\eqref{eq:wba_eigen} is equivalent to the two roots of the Riccati equation in the co-rotating frame.
-
-\subsection{Extensions by Waddington and collaborators}
-
-\citet{ThorsteinssonWaddington2002} incorporated strongly anisotropic viscosity and showed that the balance between flattening and overturning depends on fabric-modified deformation, not merely isotropic Glen flow. \citet{JacobsonWaddington2004} then replaced the strictly instantaneous criterion with deformation-gradient calculations along particle paths. If
-\begin{equation}
-\Dt\Ften=\Lten\Ften,
-\qquad
-\Ften(t_0)=\Id,
-\label{eq:F}
-\end{equation}
-then an initial tangent $\Tvec_0$ evolves as $\Tvec(t)=\Ften(t,t_0)\Tvec_0$. This finite-time construction accounts for the complete deformation history between an upstream disturbance and an ice-core site. \citet{JacobsonWaddington2005} applied related ideas to abandoned Raymond arches created by divide migration and showed that open arches can evolve into recumbent folds downstream.
-
-These developments resolve the finite-time evolution of a tangent vector, but they do not by themselves provide a local equation for the spatial width and curvature of an entire fold. That distinction motivates the following whole-curve formulation.
-
-\section{Curvature model for finite-width folds}
-
-\subsection{Isochrones as material curves}
-
-Parameterize an isochrone by a material coordinate $a$,
-\begin{equation}
-\pos=\pos(a,t)=\begin{pmatrix}x(a,t)\\z(a,t)\end{pmatrix},
-\qquad
-\partial_t\pos(a,t)=\vel(\pos(a,t),t).
-\label{eq:curve_advect}
-\end{equation}
-Define the tangent, second material derivative, tangent stretch, unit tangent, and unit normal by
-\begin{equation}
-\Tvec=\partial_a\pos,
-\qquad
-\Kvec=\partial_a^2\pos,
-\qquad
-q=|\Tvec|,
-\qquad
-\pvec=\frac{\Tvec}{q},
-\qquad
-\nvec=\Jten\pvec.
-\label{eq:curve_defs}
-\end{equation}
-Differentiating Equation~\eqref{eq:curve_advect} with respect to $a$ gives
-\begin{equation}
-\Dt\Tvec=\Lten\Tvec,
-\label{eq:T_evolution}
-\end{equation}
-which is the WBA material-line equation applied pointwise along the entire layer. Differentiating again gives
-\begin{equation}
-\Dt\Kvec=\Lten\Kvec+
-(\nabla\Lten):(\Tvec\otimes\Tvec).
-\label{eq:K_evolution}
-\end{equation}
-In components,
-\[
-\Dt K_i=u_{i,j}K_j+u_{i,jk}T_jT_k.
-\]
-The first term stretches and rotates existing spatial variation of the tangent. The second term is the finite-width correction: neighboring parts of the layer experience different velocity gradients.
-
-\subsection{Exact signed-curvature evolution}
-
-The signed curvature of the material curve is
-\begin{equation}
-\kappa=\frac{\det(\Tvec,\Kvec)}{|\Tvec|^3}.
-\label{eq:kappa_def}
-\end{equation}
-The tangent stretch rate is
-\begin{equation}
-\epsilon_t=\pvec\cdot\Dten\pvec,
-\qquad
-\Dten=\frac{1}{2}(\Lten+\Lten^{\mathsf T}),
-\label{eq:et}
-\end{equation}
-so that $\Dt q=q\epsilon_t$. Using the two-dimensional identity
-\[
-\det(\Lten\Tvec,\Kvec)+\det(\Tvec,\Lten\Kvec)
-=(\tr\Lten)\det(\Tvec,\Kvec),
-\]
-Equations~\eqref{eq:K_evolution}--\eqref{eq:kappa_def} yield
+where \(U>0\) is a representative speed, \(d\) is the vertical deformation scale, \(r>0\), \(r_s>0\), and \(C>0\). Then
 \begin{equation}
 \boxed{
-\Dt\kappa=
-\left(\tr\Lten-3\epsilon_t\right)\kappa
-+\nvec\cdot\left[(\nabla\nabla\vel):(\pvec\otimes\pvec)\right].
+\Rneg\leq
+C\frac{r_s}{r^3}
+\frac{\dot a_0}{U}
+\frac{\ell_-}{d}.
 }
-\label{eq:kappa_general}
+\label{eq:obstaclebound}
 \end{equation}
-For incompressible ice flow, $\tr\Lten=\nabla\cdot\vel=0$, and therefore
+A sufficient condition for no overturning is that the right-hand side be less than one.
+\end{proposition}
+
+\begin{proof}
+Substitute Equation~\eqref{eq:boundassumptions} into Equation~\eqref{eq:Rdef} and bound the integral by its maximum integrand multiplied by \(\ell_-\).
+\end{proof}
+
+For an isolated obstacle whose horizontal and vertical influence scales are both \(O(H)\), with non-stagnant throughflow,
 \begin{equation}
-\boxed{
-\Dt\kappa=-3(\pvec\cdot\Dten\pvec)\kappa
-+\nvec\cdot\left[(\nabla\nabla\vel):(\pvec\otimes\pvec)\right].
-}
-\label{eq:kappa_incompressible}
+\Rneg=O\left(\frac{\dot a}{U}\right).
+\label{eq:isolatedscale}
 \end{equation}
-We denote the curvature-source term by
+In a typical interior or flank setting where \(U\gg\dot a\), an isolated fixed bump can create local extrusion and visible draping but is far from the order-one reverse-shear dose required for overturning. Conversely, a long reverse-shear region with \(d\sim H\) approaches the threshold only when
 \begin{equation}
-Q_{\kappa}=\nvec\cdot\left[(\nabla\nabla\vel):(\pvec\otimes\pvec)\right]
-=\nvec\cdot(\pvec\cdot\nabla)^2\vel.
-\label{eq:Qk}
+\frac{\ell_-}{H}
+\gtrsim
+\frac{U}{\dot a_0}\frac{r^3}{Cr_s},
+\label{eq:lengththreshold}
 \end{equation}
+unless the flow becomes slow enough for the \(r^{-3}\) factor to dominate.
 
-Equation~\eqref{eq:kappa_incompressible} separates two mechanisms. The homogeneous term $-3\epsilon_t\kappa$ amplifies or suppresses curvature already present. Tangential compression, $\epsilon_t<0$, increases $|\kappa|$; tangential extension, $\epsilon_t>0$, flattens the layer. The inhomogeneous term $Q_{\kappa}$ creates curvature where the velocity gradient varies along the tangent direction. An initially straight layer, $\kappa=0$, bends at the instantaneous rate $\Dt\kappa=Q_{\kappa}$.
+Equation~\eqref{eq:obstaclebound} makes precise why ``flow over a bump cannot fold an isochrone'' is often a good glacier approximation but not a universal Stokes theorem. The approximation depends on non-stagnant flow, a localized deformation zone and a small accumulation-to-speed ratio.
 
-The factor of three has a geometric origin. One factor arises from the evolution of the numerator in Equation~\eqref{eq:kappa_def}, while three powers of the tangent stretch appear in its denominator. In a spatially affine incompressible flow, $\nabla\Lten=0$ and $Q_{\kappa}=0$; straight lines remain straight, while existing curvature is amplified by tangential compression and reduced by extension.
+\subsection{First-order cancellation over periodic roughness about plug flow}
 
-\subsection{Local conditions for fold sharpening}
-
-For $\kappa\neq0$, local curvature magnitude grows when
+A second reason that fixed roughness may have weak cumulative effect is cancellation, but the clean result requires a plug-flow background. Let
 \begin{equation}
-\Dt|\kappa|>0
-\quad\Longleftrightarrow\quad
-\kappa\Dt\kappa>0.
-\label{eq:local_growth_def}
+ u(x,z;\epsilon_b)=U_b+\epsilon_b u_1(x,z)+O(\epsilon_b^2),
+ \qquad U_b>0,
+\label{eq:plugperturbation}
 \end{equation}
-Combining this definition with Equation~\eqref{eq:kappa_incompressible} gives
+where \(U_b\) is spatially uniform and \(u_1\) is periodic in \(x\), with wavelength \(2\pi/k\) and zero horizontal mean at each elevation. Along the unperturbed trajectory \(z=z_0\),
 \begin{equation}
-\boxed{
--3\epsilon_t\kappa^2+\kappa Q_{\kappa}>0.
-}
-\label{eq:local_growth}
+\frac{u_z}{u^3}
+=\epsilon_b\frac{u_{1,z}(x,z_0)}{U_b^3}+O(\epsilon_b^2).
+\label{eq:periodicshear}
 \end{equation}
-Equation~\eqref{eq:local_growth} is the finite-width local generalization of the WBA orientation criterion. It states that a bend sharpens when tangential compression and differential rotation reinforce its signed curvature. It also makes clear that no single ratio analogous to $S$ can describe all finite-width folds: the source term depends on the curvature sign, tangent orientation, and spatial variation of the velocity gradient.
-
-A useful nondimensional diagnostic for $\kappa\neq0$ is
+Therefore, over one complete wavelength,
 \begin{equation}
-\mathcal{G}_{\kappa}
-=\frac{1}{|\dot\epsilon_*|}\frac{1}{\kappa}\Dt\kappa
-=\frac{-3\epsilon_t+Q_{\kappa}/\kappa}{|\dot\epsilon_*|},
-\label{eq:Gk}
+\int_{x}^{x+2\pi/k}\frac{u_z}{u^3}\,\dd\xi=O(\epsilon_b^2).
+\label{eq:periodiccancel}
 \end{equation}
-where $\dot\epsilon_*$ is a chosen characteristic strain rate. Positive $\mathcal{G}_{\kappa}$ denotes instantaneous exponential amplification of signed curvature; it is undefined at $\kappa=0$, where $Q_{\kappa}$ itself is the appropriate diagnostic.
+The perturbative frictionless rough-bed solution of \textcite{Gudmundsson1997linear} has this plug-flow structure: local extrusion occurs, but its first-order stoss- and lee-side contributions cancel over a complete symmetric wavelength.
 
-\subsection{A global finite-width measure}
+Cancellation is not guaranteed for a sheared background, a solitary asymmetric obstacle, a finite path ending mid-cycle, strongly nonlinear roughness or near-stagnant trajectories. Equation~\eqref{eq:periodiccancel} is therefore a restricted asymptotic result, not a general symmetry theorem.
 
-Local curvature growth at one point need not imply growth of the whole fold. For a material layer segment $\mathcal{C}(t)$, define curvature energy
+\section{How the order theorem can fail}
+
+\subsection{Cumulative extrusion without stagnation}
+
+The most direct steady-flow route is Equation~\eqref{eq:verticalcondition}. A glacier with \(u>0\) can overturn a steady isochrone if reverse shear is sufficiently strong, sufficiently persistent or sufficiently concentrated where \(u\) is small. The exact threshold is
 \begin{equation}
-E_{\kappa}(t)=\frac{1}{2}\int_{\mathcal{C}(t)}\kappa^2\,\dd s.
-\label{eq:Ek}
+\dot a_0u_{s0}
+\int_{x_0}^{x}\frac{u_z^-}{u^3}\,\dd\xi
+=
+1+
+\dot a_0u_{s0}
+\int_{x_0}^{x}\frac{u_z^+}{u^3}\,\dd\xi.
+\label{eq:exactthresholdexpanded}
 \end{equation}
-Because a material arclength element evolves as $\Dt(\dd s)=\epsilon_t\dd s$, differentiation gives
+No change in boundary conditions is logically necessary if a steady full-Stokes velocity field satisfies this equality. The existing extrusion-flow literature establishes plausible ingredients but, to our knowledge, has not evaluated this cumulative isochrone-order threshold.
+
+\subsection{Stagnation, separation and closed circulation}
+
+If \(u\) reaches zero, the \(x\)-travel-time representation becomes singular. If a secondary circulation forms, a streamline may not have a unique surface origin and may intersect an equal-age surface in a topology not represented by a single downstream coordinate. Strong roughness, cavities and sharp corners are therefore not merely large values of \(\Rneg\); they can invalidate the coordinate system on which the theorem rests. Numerical calculations should treat \(u=0\) as an event and switch to a more general Lagrangian deformation analysis.
+
+\subsection{Surface ablation and sublimation}
+
+An accumulating surface is an inflow boundary on which newly deposited material has \(\tau=0\). An ablating surface is an outflow boundary at which existing isochrones terminate. In a blue-ice area, the surface streamfunction need not be globally monotone because
 \begin{equation}
-\boxed{
-\frac{\dd E_{\kappa}}{\dd t}
-=\int_{\mathcal{C}(t)}
-\left[-\frac{5}{2}\epsilon_t\kappa^2+\kappa Q_{\kappa}\right]\dd s.
-}
-\label{eq:Ek_growth}
+Q'(x)=\dot a(x)
 \end{equation}
-Thus a finite fold grows in this norm when the right-hand side of Equation~\eqref{eq:Ek_growth} is positive. Other norms may be preferable for particular observations: maximum curvature for core-scale sharp hinges, total variation of tangent angle for fold trains, or vertical amplitude for radar-scale structures. The important point is that a finite-width criterion must integrate the spatially varying geometry of the whole layer.
+changes sign between accumulation and ablation zones. A streamline may enter through an upstream accumulation region and leave through a downstream ablation region. The theorem can still be applied to an interior trajectory if that trajectory has a unique origin on an upstream accumulating branch, but \(Q^{-1}\) must be constructed on that branch rather than on the entire local surface. Multiple inflow branches or an origin on basal freeze-on require a more general material-source label.
 
-\subsection{Overturning and stratigraphic order}
+Steady ablation most naturally produces upward-bent and truncated layers, not an intact fold. However, migration, onset or cessation of an ablation zone changes the age field relative to the new steady solution and supplies precisely the inherited disturbance required by WBA. Surface sublimation followed by burial can also preserve an unconformity with steep or truncated limbs. At Allan Hills, the present surface is an ablation boundary and therefore lies outside the simplest theorem even if the subsurface velocity is steady.
 
-Curvature growth is not equivalent to overturning. A fold overturns relative to a vertical core or a horizontal flow coordinate when the horizontal projection of the tangent loses monotonicity. Define
-\begin{equation}
-J_x(a,t)=\partial_a x=\bm{e}_x\cdot\Tvec.
-\label{eq:Jx}
-\end{equation}
-If the layer is initially ordered with $J_x>0$, the first vertical tangent occurs when
-\begin{equation}
-\boxed{
-\min_a J_x(a,t)=0.
-}
-\label{eq:overturn}
-\end{equation}
-An interval with $J_x<0$ is locally overturned. The WBA slope $m=z_a/x_a$ diverges as $J_x\rightarrow0$, but the material curve remains regular. Equation~\eqref{eq:overturn} therefore provides a nonsingular finite-amplitude overturning criterion.
+\subsection{Basal melting and freeze-on}
 
-Actual age reversal in a vertical core additionally depends on the intersection geometry between the folded isochrone and the core line. A recumbent fold can create multiple intersections of one isochrone with a vertical sampling line, while an ablation surface can remove one or more limbs and replace a fold signature with a truncation or unconformity. Core interpretation consequently requires both the internal material geometry and the history of the non-material surface boundary.
+Basal melting removes trajectories and truncates layers. Basal freeze-on introduces ice through a second inflow boundary, so one surface deposition coordinate cannot label the entire stratigraphy. Numerical models show that freeze-on can generate plume-like structures and complex internal layering extending through a large fraction of the ice thickness \parencite{LeysingerVieli2018}. A moving melt/freeze boundary additionally makes the velocity and age problem time dependent.
 
-\subsection{Finite-time amplification and non-normality}
+\subsection{Time-dependent geometry and basal traction}
 
-Equations~\eqref{eq:kappa_incompressible} and \eqref{eq:local_growth} are instantaneous. Along a trajectory, compression and curvature production may change sign. The finite-time solution is
-\begin{equation}
-\kappa(t)=
-\exp\left[-3\int_{t_0}^{t}\epsilon_t(\tau)\,\dd\tau\right]
-\left[
-\kappa(t_0)+
-\int_{t_0}^{t}
-\exp\left(3\int_{t_0}^{\tau}\epsilon_t(s)\,\dd s\right)
-Q_{\kappa}(\tau)\,\dd\tau
-\right].
-\label{eq:kappa_solution}
-\end{equation}
-This expression separates accumulated amplification of initial curvature from curvature generated along the path.
+If the bed, free surface, divide position or basal traction changes, the inherited age field is not the steady age solution of the new velocity field. The perturbation then obeys a homogeneous advection equation only after the change; it need not vanish initially. Divide migration converts a formerly steady Raymond arch into a fold seed \parencite{JacobsonWaddington2005}. Traveling slippery or sticky patches produce moving-frame critical layers and thickness-scale overturning \parencite{Wolovick2014,WolovickCreyts2016}. Bedrock uplift, rotation or erosion similarly changes the reference stratigraphy and can inject a finite-amplitude disturbance even when subsequent flow is steady.
 
-For the complete layer perturbation, let $\mathcal{U}(t,t_0)$ denote the linearized finite-time propagator mapping an initial displacement field $\bm{\xi}(a,t_0)$ to $\bm{\xi}(a,t)$. Fold amplification in a chosen norm is governed by the singular values of $\mathcal{U}$, not generally by the instantaneous eigenvalues of $\Lten$. This distinction matters in spatially varying and non-normal flows, where transient growth can be large even when all local modal growth rates are non-positive.
+\subsection{Active rheology, anisotropy and three-dimensional flow}
 
-\subsection{Amplitude, wavelength, and the absence of passive wavelength selection in affine flow}
+Equation~\eqref{eq:uzdecomp} assumes isotropic scalar viscosity. Crystal fabric, impurities, grain size and damage can alter both the stress--strain relation and the velocity field in response to stratigraphy. Full-Stokes anisotropic divide models already demonstrate substantial changes in isochrone shape and age--depth relations \parencite{MartinGudmundssonPritchardGagliardini2009}. More strongly coupled heterogeneity can generate folds internally rather than merely advecting an imposed perturbation \parencite{Alley1997,ThorsteinssonWaddington2002,Bons2016,Bons2025}. The Allan Hills microstructure indicates that anisotropy and localized shear cannot be ignored \parencite{Stoll2026}.
 
-Consider an initial normal displacement
-\begin{equation}
-\bm{\xi}(a,t_0)=A_0\cos(ka)\nvec_0,
-\qquad
-k=\frac{2\pi}{\lambda}.
-\label{eq:sinusoid}
-\end{equation}
-Its slope amplitude scales as $A_0k$ and its curvature amplitude as $A_0k^2$. A local orientation criterion therefore senses amplitude divided by wavelength, whereas the curvature formulation also contains the second spatial derivative needed to distinguish broad and narrow wrinkles.
+The order theorem is also intrinsically two-dimensional. In three dimensions, incompressibility provides a vector potential rather than a scalar streamfunction, and neighboring surface origins can exchange order in one horizontal projection while remaining separated in the other. Divide models show that along-ridge flow and divide migration alter isochrone architecture even when cross-flow is modest \parencite{MartinHindmarshNavarro2009}. A three-dimensional generalization should track the two-dimensional Jacobian mapping a surface deposition patch to an equal-age surface. The scalar \(\Jord\) is recovered only when cross-flow is negligible and a coherent flow tube exists.
 
-If the velocity field is affine,
-\begin{equation}
-\vel(\pos,t)=\Lten(t)\pos+\bm{b}(t),
-\end{equation}
-then every material curve is transformed by the same deformation gradient $\Ften$. No intrinsic wavelength is selected: all Fourier components are acted on by the same spatially uniform linear map. Wavelength dependence in passive folding requires spatial variation in $\Lten$, finite boundaries with a response depending on $kH$, or a forcing region of finite width. A preferred wavelength in an actively growing fold additionally requires a rheological or dynamical feedback, such as anisotropy, viscosity contrast, damage, or another intrinsic length scale \citep{Bons2025,Zhang2024}.
+\section{Implications for Allan Hills and COLDEX}
 
-\section{Numerical formulation}
+The Allan Hills setting sits close to several limits in which a fixed-obstacle argument becomes unreliable. Present-day horizontal motion near ALHIC1901 is only centimetres per year, the ice rises toward an ablating surface, and the bed contains steep buried nunatak geometry \parencite{Spaulding2012,Kehrl2018,Stoll2026}. Slow motion enhances the \(u^{-3}\) weighting in Equation~\eqref{eq:Rdef}. The local ablation surface is an outlet rather than the deposition boundary, so relevant source-to-core trajectories must be traced to an upstream accumulation branch or another material source. Strong relief raises the possibility of nonhydrostatic stress, local extrusion and near-stagnant flow. The small parameter \(\dot a/U\) that protects ordinary fast flank flow may therefore not be small along the relevant source-to-core trajectories.
 
-The theory can be tested with a hierarchy of prescribed-flow and dynamically coupled calculations. In all cases, material stratigraphy may be represented either by Lagrangian marker curves satisfying Equation~\eqref{eq:curve_advect} or by a material scalar $\tau(\bm{x},t)$ satisfying
-\begin{equation}
-\partial_t\tau+\vel\cdot\nabla\tau=0,
-\label{eq:age_advection}
-\end{equation}
-whose level sets are isochrones. Lagrangian curves provide direct access to $\Tvec$, $\kappa$, and $J_x$; an Eulerian scalar is more robust after strong overturning and for three-dimensional extension.
+At the same time, the observed deformation cannot be attributed to present-day steady geometry without a trajectory calculation. Steep dip is not overturning: the \(69^{\circ}\) mean dip in ALHIC2302 remains below vertical \parencite{Kirkpatrick2025}. Centimetre-scale z-folds in ALHIC1901 demonstrate local folding but are too small by themselves to explain all core-scale age reversals \parencite{Stoll2026}. The inverted age--depth relation in ALHIC1901 is the more direct evidence that \(\tau_z\) has changed sign along at least some sampling intervals \parencite{Shackleton2025}. Equation~\eqref{eq:Jage} translates that observation into \(\Jord<0\) if the sampled layers belong to a single surface-origin family; alternatively, multiple source boundaries, unconformities or faults could also generate apparent age reversal.
 
-For dynamically consistent experiments, the velocity is obtained from incompressible Stokes flow,
-\begin{align}
-\nabla\cdot\vel&=0,\\
--\nabla p+\nabla\cdot\bm{\tau}+\rho\bm{g}&=\bm{0},
-\end{align}
-with isotropic Glen rheology or an anisotropic constitutive relation as appropriate. At the upper surface $z=s(x,t)$,
-\begin{equation}
-\partial_t s+u_s\partial_x s-w_s=\dot a(x,t),
-\label{eq:surfacekin}
-\end{equation}
-where $\dot a$ is surface mass balance. Basal boundary conditions may prescribe no penetration and a spatially or temporally varying traction or sliding law.
+The theory suggests a falsifiable hierarchy of hypotheses.
 
-Four benchmark classes are proposed:
-\begin{enumerate}[leftmargin=*]
-    \item \textbf{Affine-flow verification.} Compare numerical tangent and curvature evolution against Equations~\eqref{eq:F} and \eqref{eq:kappa_solution} with $Q_{\kappa}=0$.
-    \item \textbf{Spatially varying prescribed flow.} Construct analytic velocity fields with known $\nabla\Lten$ to verify curvature production from an initially straight layer.
-    \item \textbf{Traveling basal-traction and ablation anomalies.} Impose perturbations proportional to $f(x-ct)$ and quantify fold amplification as functions of anomaly speed $c$, width $L$, ice thickness $H$, and depth-dependent ice velocity $u(z)$.
-    \item \textbf{Allan Hills geometry.} Use measured surface velocity, mass balance, bed topography, radar layers, and dated core horizons to evaluate whether observed folds and age reversals can be generated by passive deformation alone.
+\begin{enumerate}[leftmargin=*,label=(\arabic*)]
+  \item \textbf{Steady fixed geometry.} Compute the present or reconstructed steady full-Stokes field and evaluate \(\Rpos\), \(\Rneg\) and \(\Jord\) along source-to-core trajectories. If \(1+\Rpos-\Rneg\) remains positive with a substantial margin, fixed present-day geometry cannot produce the observed recumbent folding.
+  \item \textbf{Steady but singular or multi-source flow.} Test for stagnation, recirculation, basal freeze-on and surface origin multiplicity. If these occur, the simple order theorem is inapplicable and the full material map must be used.
+  \item \textbf{Inherited unsteady stratigraphy.} If the steady model preserves order, evaluate changes in ablation pattern, ice thickness, flow direction, divide position, bed geometry and basal traction. These mechanisms inject finite disturbances that can later be amplified by shear.
+  \item \textbf{Active deformation.} If kinematic models underpredict observed folds, couple fabric and rheological heterogeneity to flow. The microstructural evidence makes this a likely contributor at least at centimetre scale.
 \end{enumerate}
 
-For a traveling forcing, the principal nondimensional controls are expected to include
+This hierarchy sharpens, rather than proves, the intuition that boundary-condition changes are required. They are effectively required in the regular shallow, non-stagnant regime because Equation~\eqref{eq:obstaclebound} leaves a large order margin. They are not mathematically required for every full-Stokes glacier: sufficiently cumulative extrusion or loss of unique throughflow can overturn steady isochrones.
+
+\section{Numerical diagnostic for full-Stokes models}
+
+The order criterion can be evaluated without explicitly solving the age equation or advecting a dense family of isochrones. Release trajectories from an accumulating inflow boundary and record \(x_0\), \(\dot a_0\) and \(u_{s0}\). Along each trajectory integrate
+\begin{align}
+\frac{\dd x}{\dd t}&=u,
+&
+\frac{\dd z}{\dd t}&=w,
+\label{eq:trajectory}\\
+\frac{\dd\Rpos}{\dd t}
+&=\dot a_0u_{s0}\frac{u_z^+}{u^2},
+&
+\frac{\dd\Rneg}{\dd t}
+&=\dot a_0u_{s0}\frac{u_z^-}{u^2},
+\label{eq:PRode}
+\end{align}
+with \(\Rpos(0)=\Rneg(0)=0\). Then
 \begin{equation}
- kH,\qquad \frac{c}{U_s},\qquad \frac{c}{U(z)},\qquad
- \frac{A L}{H|U-c|},\qquad
- \frac{u_b}{U_s},
-\label{eq:dimensionless}
+\boxed{
+\Jord(t)=\frac{u(t)}{u_{s0}}
+\left[1+\Rpos(t)-\Rneg(t)\right].
+}
+\label{eq:Jdiagnostic}
 \end{equation}
-where $A$ is an ablation-rate scale, $U_s$ is surface speed, and $u_b$ is basal speed. The factor $AL/[H|U-c|]$ measures the potential vertical displacement accumulated during residence beneath a traveling surface anomaly. Model output should report the WBA orientation tendency, $\kappa$, $Q_{\kappa}$, $E_{\kappa}$, and the first time at which $J_x=0$.
+The diagnostic is
+\begin{equation}
+\min_t\left[1+\Rpos(t)-\Rneg(t)\right]
+\begin{cases}
+>0, & \text{order preserved},\\
+=0, & \text{first vertical tangent},\\
+<0, & \text{overturned steady isochrone}.
+\end{cases}
+\label{eq:numericaltest}
+\end{equation}
 
-\section{Numerical modeling results}
+A robust implementation should include four checks. First, compare Equation~\eqref{eq:Jdiagnostic} with \(-\dot a_0\tau_z\) from an independently solved steady age equation. Second, advect at least one pair of neighboring particles to verify the sign of \(\partial x/\partial x_0|_{\tau}\). Third, stop the downstream-coordinate integration when \(u\) approaches zero and diagnose recirculation with the full trajectory topology. Fourth, compute \(u_z\) using the finite-element gradient rather than differencing noisy interpolated velocities. Separate storage of \(\Rpos\) and \(\Rneg\) is preferable to integrating their difference because large compensating contributions can otherwise obscure numerical error.
 
-% Intentionally left blank for numerical results, figures, and quantitative tests.
+For transient flow, Equation~\eqref{eq:Jdiagnostic} is not valid because the steady travel-time representation fails. The corresponding calculation should integrate the deformation of the two-parameter deposition map through time. Nevertheless, the steady order budget remains useful as a baseline and as a diagnostic applied to quasi-steady snapshots.
 
 \section{Discussion}
 
-\subsection{From tangent rotation to finite-width folding}
+\subsection{A theorem about deposition order, not about curvature}
 
-The WBA criterion and the curvature model address different but nested questions. WBA diagnoses the relative rotation of one infinitesimal tangent at one position. The curvature model diagnoses variation of tangent orientation along a finite layer. In this hierarchy,
-\begin{equation}
-\Lten\quad\longrightarrow\quad\text{rotation and stretching of one tangent},
-\end{equation}
-whereas
-\begin{equation}
-\nabla\Lten\quad\longrightarrow\quad\text{differential rotation of neighboring tangents and curvature production}.
-\end{equation}
-The WBA critical orientation is therefore not superseded; it is recovered as the local projective dynamics of Equation~\eqref{eq:T_evolution}. The new ingredient is an explicit account of the fold's spatial width.
+The curvature equation for an advected material line contains first and second spatial derivatives of velocity. It correctly shows that an obstacle can create curvature from an initially straight layer. The present order criterion answers a different question. A recumbent fold requires the horizontal projection of an equal-age surface to reverse, or equivalently \(\tau_z\) to change sign. An obstacle may generate large curvature while \(\Jord\) remains positive everywhere. This is the rigorous sense in which a steady bump can disturb isochrones without supplying the order-reversing seed required for a recumbent fold.
 
-This distinction resolves an apparent conceptual problem in local wrinkle analyses. A finite-amplitude bump does not possess one slope. It consists of a continuum of tangent segments $m(a,t)$, each evolving under the local velocity gradient. WBA may be applied pointwise to these segments, but the resulting collection becomes a theory of a finite fold only when the segments are coupled through their spatial arrangement. Equation~\eqref{eq:kappa_incompressible} performs that coupling at the level of curvature.
+WBA's statement that steady-state layers are not passively folded can now be made conditional. If a unique steady age field exists and Equation~\eqref{eq:ordercondition} holds, exact steady stratigraphy is an invariant solution and remains ordered. A prescribed steady flow cannot spontaneously create a perturbation relative to that solution. However, arbitrary material lines placed in the same velocity field are not subject to this restriction, and the restriction can fail if cumulative reverse shear crosses the threshold or if the surface-origin coordinate ceases to be global.
 
-\subsection{Passive amplification versus active instability}
+\subsection{Why local extrusion is usually insufficient}
 
-The present theory assumes a prescribed velocity field. It determines whether an existing disturbance is rotated, sharpened, or overturned by the flow. It does not establish that an arbitrarily small disturbance grows through feedback on stress or viscosity. An active stability theory must perturb the momentum and constitutive equations as well as the stratigraphy. If $\tau$ is a material layer label and primes denote perturbations,
-\begin{equation}
-\partial_t\tau'+\vel_0\cdot\nabla\tau'
-+\vel'\cdot\nabla\tau_0=0.
-\label{eq:active_layer}
-\end{equation}
-The perturbation velocity $\vel'$ must be obtained from the linearized Stokes and rheological equations. Fourier modes proportional to $\exp(ikx+\sigma t)$ are actively unstable when $\Re\sigma(k)>0$. This coupled problem can select a wavelength, unlike passive deformation in an affine flow.
+The full-Stokes literature demonstrates local extrusion but does not imply order reversal. Three effects protect the isochrone. First, deposition provides a finite unit margin in Equation~\eqref{eq:JPR}. Second, ordinary surface-fast shear adds \(\Rpos\). Third, reverse shear around a localized or periodic obstacle is short-lived and can cancel between stoss and lee sides. The bound in Equation~\eqref{eq:obstaclebound} quantifies the first two effects, while Equation~\eqref{eq:periodiccancel} quantifies the third in a perturbative setting.
 
-Strong ice anisotropy provides one plausible feedback. Observed fold spectra and three-dimensional simulations indicate that crystal fabric and power-law rheology can promote fold formation over a broad range of scales \citep{Bons2016,Bons2025,Zhang2024}. The curvature equation remains useful in such models as a geometric diagnostic, but $\vel$ can no longer be regarded as independent of the folded stratigraphy and fabric.
+Near stagnation the protection weakens sharply. The \(u^{-3}\) spatial weighting and \(u^{-2}\) temporal weighting imply that a slowly moving basal zone can accumulate a large order change even when the pointwise shear is moderate. This is also the regime in which age becomes large, numerical conditioning deteriorates and recirculation becomes possible. A convincing steady-obstacle explanation for Allan Hills folding should therefore identify a specific slow reverse-shear pathway and demonstrate that it crosses Equation~\eqref{eq:verticalcondition}; showing \(u_z<0\) is insufficient.
 
-\subsection{Traveling basal-traction anomalies}
+\subsection{Boundary changes as fold seeds}
 
-Traveling basal-slip or sticky patches provide a clear example of strong passive amplification. Stationary changes in basal slip redistribute horizontal flux with depth and produce vertical motion through incompressibility. When the traction anomaly travels at speed $c$, ice for which $u(z)\simeq c$ remains near the anomaly for an anomalously long time. Thermomechanical models show that such patches can uplift basal ice through a substantial fraction of the ice thickness and produce long-lived flux perturbations \citep{Wolovick2014}. Kinematic models show that the moving-frame flow can contain closed streamlines and material trapping \citep{WolovickCreyts2016}.
+Time-dependent boundary processes remain the most natural route to finite inherited disturbances. Surface sublimation can truncate and steepen layers; migration of the ablation boundary can leave that geometry to be buried or sheared. Basal melt and freeze-on alter source and sink topology. Divide migration changes the reference velocity profile. Traveling traction anomalies create a moving-frame critical layer and material trapping. Bedrock uplift or rotation changes both geometry and stress. Each mechanism breaks at least one assumption behind the steady order theorem and can therefore create a nonzero perturbation relative to the current steady stratigraphy.
 
-In the present language, the anomaly produces both large integrated tangential strain and a strong curvature source $Q_{\kappa}$ near its leading and trailing transitions. The WBA criterion predicts whether local tangents rotate toward overturning; Equation~\eqref{eq:kappa_solution} predicts how the finite-width bend accumulates along a trajectory; and Equation~\eqref{eq:overturn} identifies actual reversal of the horizontal projection. This decomposition may clarify why some basal anomalies produce smooth layer drape while others create recumbent folds.
+The order framework does not identify which mechanism operated at Allan Hills. It supplies a rejection test. If a high-resolution, history-consistent full-Stokes model of fixed geometry satisfies \(\Jord>0\) by a wide margin on all relevant trajectories, then steady topographic draping is excluded as the cause of recumbent age reversals. The remaining explanation must invoke time dependence, multiple material sources, active rheology, three-dimensional exchange or structural discontinuity.
 
-\subsection{Traveling ablation zones in an accumulation region}
+\subsection{Novelty and relationship to established theory}
 
-A traveling surface-ablation zone is related but not identical. The surface is not a material streamline when $\dot a\neq0$, and material trajectories can enter the ice through accumulation and terminate at the surface through ablation. The generic response is therefore upward bending and truncation of layers, followed by burial of an erosional unconformity when accumulation resumes. Nevertheless, speed matching can create large deformation. A patch of width $L$ moving at speed $c$ has a nominal residence time $L/|u-c|$, so modest vertical velocities can produce thickness-scale displacements when $c$ approaches the local ice speed.
+Several components of this manuscript are established. Equation~\eqref{eq:agepsiJacobian} is a standard consequence of steady incompressible transport. Logarithmic flux coordinates and characteristic age solutions were developed by \textcite{ParreninHindmarshRemy2006} and \textcite{ParreninHindmarsh2007}, and the latter paper contains both the monotonic-shear corollary and the path dependence of isochrone slope. The vertical thinning function was derived in the same framework by \textcite{Parrenin2013} and is now computed operationally by \textcite{ParreninChungMartin2025}; Equation~\eqref{eq:thinningrelation} shows that the present order factor is its inverse in the ordered regime. The need for a transient wrinkle and the competition between shear and extension are due to \textcite{Waddington2001}. Finite-strain amplification is treated by \textcite{JacobsonWaddington2004}. Local extrusion and rough-bed recirculation are known full-Stokes phenomena \parencite{Gudmundsson1997linear,Gudmundsson1997nonlinear}.
 
-Whether the result is an intact fold or a truncated unconformity depends on competition among curvature growth, upward advection, and removal at the surface. The curvature criterion alone is insufficient because the material curve may cease to exist after intersecting the ablation boundary. Numerical experiments should therefore track both internal geometry and first-passage time to the surface. A useful observational distinction is that passive folding preserves continuity of a material horizon through the fold, whereas ablation creates terminations and age gaps subsequently draped by younger accumulation.
+The specific analytical contribution is therefore not the age--streamfunction coordinate system, the thinning factor or the monotonic-shear theorem. It is the explicit physical-space identity that writes the signed inverse thinning as a cumulative \(u_z/u^3\) integral, its positive--negative decomposition in Equations~\eqref{eq:Pdef}--\eqref{eq:ordercondition}, and the mechanical consequences drawn from that decomposition. A targeted search of the steady-isocrone, age-model and extrusion-flow literature did not identify the same reverse-shear budget, the full-Stokes residual threshold in Equation~\eqref{eq:FSfailure}, the localized-obstacle bound in Equation~\eqref{eq:obstaclebound}, the plug-flow cancellation result in Equation~\eqref{eq:periodiccancel}, or the split trajectory diagnostic in Equation~\eqref{eq:Jdiagnostic}. Priority for such elementary identities is difficult to establish exhaustively, so these claims should be read as a cautious reformulation and extension of Parrenin--Hindmarsh theory, not as a new universal theorem about incompressible Stokes flow.
 
-\subsection{Implications for Allan Hills stratigraphy}
+The strongest future novelty would come from applying the diagnostic to realistic Allan Hills geometry and history. A model that either proves a large positive order margin or demonstrates a trajectory crossing \(\Jord=0\) would resolve whether fixed roughness is dynamically adequate. Coupling that calculation to observed layer attitudes, age reversals and fabric would connect a mathematical sign criterion to a specific paleoclimate archive.
 
-The Allan Hills provide a natural test of the theory because the system combines nearly every relevant ingredient: slow flow, strong and spatially variable ablation, upward motion, rugged basal and lateral topography, long residence times, extreme cumulative thinning, and complex crystal fabric. The old-ice archive need not be explained by one universal folding mechanism. Different cores and depth intervals may sample distinct regimes:
-\begin{enumerate}[leftmargin=*]
-    \item passive upwarping and surface truncation associated with stationary blue-ice ablation;
-    \item finite-time fold amplification as ice traverses spatially varying strain fields around bedrock obstacles;
-    \item transient deformation associated with migrating ablation boundaries or changing basal traction;
-    \item active anisotropic folding in highly strained old ice.
-\end{enumerate}
+\subsection{Limitations}
 
-The curvature-source term provides a direct bridge between observed velocity fields and layer geometry. Where a sufficiently resolved model of $\vel$ is available, maps of $Q_{\kappa}$ predict where straight or gently curved isochrones should begin to bend. Integrated tangential compression predicts where those bends should sharpen. Radar-constrained layers then test the forward prediction, while core age reversals and continuous-flow measurements constrain whether the modeled curves actually overturn or are truncated. This approach could help determine whether age discontinuities are local structural features, repeated limbs of folds, erosional omissions, or boundaries between dynamically distinct ice packages.
+The analysis neglects diffusion of age markers, fracture and discontinuous displacement. It assumes a smooth two-dimensional velocity field and a single-valued accumulating inflow branch. The full-Stokes decomposition assumes isotropic scalar viscosity. It does not establish a universal mechanical bound on \(R_{\mathrm{FS}}\), because none follows from the Stokes equations alone. The localized-obstacle estimate depends on externally supplied bounds on minimum speed, deformation scale and reverse shear. The periodic cancellation result is first order and can be destroyed by asymmetry or nonlinear geometry.
 
-\subsection{Observational tests}
-
-The framework suggests several measurable diagnostics. First, radar-derived curvature can be compared with modeled $Q_{\kappa}$ and accumulated $\epsilon_t$ along flow paths. Second, the sign of $J_x$ can be inferred where three-dimensional radar mapping resolves overturned limbs. Third, core-scale fold hinges and crystal fabrics can test whether passive curvature amplification or anisotropic active folding is more plausible. Fourth, repeated absolute ages on closely spaced samples can distinguish continuous recumbent folds from discontinuities produced by surface or basal removal. Finally, dense surface-velocity and strain measurements can identify present-day regions in which the WBA and curvature criteria disagree, providing targeted tests of the finite-width correction.
-
-\subsection{Limitations and extension to three dimensions}
-
-The derivation is two-dimensional and assumes a smooth material curve in a differentiable velocity field. Real fold systems are three-dimensional material surfaces. Their geometry is described by a shape operator or second fundamental form with two principal curvatures, and their evolution involves the surface velocity gradient and its spatial derivatives. Cross-flow permits material bypass that is impossible in a two-dimensional flowline and may weaken moving-frame trapping. Extending Equation~\eqref{eq:kappa_incompressible} to the evolution of the second fundamental form is therefore a priority.
-
-Additional limitations include neglected fracture, recrystallization, diffusion of chemical layers, and rheological feedback. Near an ablating surface, layers are not conserved indefinitely. Near the bed, basal melting, freeze-on, and debris entrainment can create or destroy stratigraphic surfaces. These processes must be represented explicitly before the theory is applied to absolute age continuity.
+Most importantly, the theorem diagnoses overturning of a continuous material isochrone. An observed age reversal can also result from faulting, unconformity, multiple source regions, freeze-on ice, sampling across a sharply dipping but discontinuous structure, or unresolved three-dimensional geometry. The order diagnostic should therefore be used with structural observations rather than as a stand-alone interpretation.
 
 \section{Conclusions}
 
-WBA established a fundamental local criterion for passive stratigraphic folding by comparing the rotation of a disturbed layer segment with that of a steady reference isochrone. Their result can be expressed as an eigendirection problem for the velocity-gradient tensor in a frame rotating with the reference layer. This interpretation clarifies that the WBA shear number governs local orientation dynamics, not the complete geometry of a finite fold.
+\begin{enumerate}[leftmargin=*]
+  \item A steady two-dimensional isochrone preserves depositional order if and only if its signed order factor
+  \[
+  \Jord=\frac{u}{u_{s0}}
+  \left[1+\dot a_0u_{s0}\int_{x_0}^{x}\frac{u_z}{u^3}\,\dd\xi\right]
+  \]
+  remains positive. The equivalent observable condition is \(\tau_z<0\), and in the ordered regime \(\Jord\) is the reciprocal of the established vertical thinning function.
 
-Treating an isochrone as a material curve yields an exact finite-width extension. In incompressible two-dimensional flow, curvature evolves according to Equation~\eqref{eq:kappa_incompressible}. Existing curvature is amplified by tangential compression and suppressed by extension; curvature is created by spatial variation of the velocity gradient along the layer. The local sharpening condition is Equation~\eqref{eq:local_growth}, a global fold-growth condition follows from Equation~\eqref{eq:Ek_growth}, and actual overturning occurs when the horizontal tangent projection first vanishes. These diagnostics separate local rotation, finite-width sharpening, overturning, and active instability.
+  \item Pointwise surface-fast shear, \(u_z\geq0\), is sufficient but not necessary. The exact condition is cumulative:
+  \[
+  \Rneg<1+\Rpos.
+  \]
+  Local extrusion is harmless unless its weighted path integral erases the unit depositional margin and all accumulated normal shear.
 
-The framework is particularly relevant to the Allan Hills, where the scientific value of multi-million-year-old ice is limited by folding, thinning, truncation, and age reversal. Coupling the geometric diagnostics developed here with radar, absolute dating, core microstructure, and full-Stokes modeling offers a route toward determining which parts of the archive preserve continuous climate information and which record transient glacier dynamics.
+  \item Full-Stokes mechanics does not guarantee the condition for arbitrary glacier geometry. Gravity-driven shear favors order, but longitudinal stress, nonhydrostatic pressure and horizontal gradients of vertical velocity can generate reverse shear. Stagnation and recirculation invalidate the one-way coordinate construction entirely.
 
-\section*{Data and code availability}
-No new data are presented in this theoretical manuscript. Numerical implementation and model output will be archived in a public repository upon completion. \todo{Insert repository and DOI.}
+  \item The shallow-ice regime preserves order. A non-stagnant localized obstacle obeys the sufficient bound
+  \[
+  \Rneg\leq C\frac{r_s}{r^3}\frac{\dot a_0}{U}\frac{\ell_-}{d},
+  \]
+  and small-amplitude periodic roughness about a uniform plug-flow background has no first-order net order change over a complete wavelength.
 
-\section*{Author contributions}
-B.P.L. developed the conceptual framework and derivations and wrote the manuscript. \todo{Revise after coauthor contributions are established.}
+  \item The theory converts the intuition that fixed obstacles produce draping rather than folds into a conditional, testable statement. In ordinary fast, shallow throughflow, boundary or rheological changes are effectively required to seed recumbent folding. In slow, rough, near-stagnant full-Stokes flow, fixed geometry remains a viable mechanism until the cumulative diagnostic is evaluated.
+
+  \item For COLDEX, the decisive next calculation is to integrate \(\Rpos\), \(\Rneg\) and \(\Jord\) along reconstructed source-to-core trajectories at Allan Hills. This will distinguish steady topographic deformation from folding that requires ablation history, basal mass exchange, traction change, geometry change, anisotropy or three-dimensional flow.
+\end{enumerate}
+
+\section*{Data availability}
+No new observational data are presented. The analytical results are fully specified by the equations in this manuscript. The numerical diagnostic requires a model velocity field and its vertical derivative.
+
+\section*{Code availability}
+No software is included with this theoretical draft. Equations~\eqref{eq:trajectory}--\eqref{eq:Jdiagnostic} provide a direct implementation specification for particle-tracking codes.
+
+\section*{Author contribution}
+Bradley Paul Lipovsky developed the analysis and wrote the manuscript draft.
 
 \section*{Competing interests}
-The author declares no competing interests.
+To be completed by the author before submission.
 
 \section*{Acknowledgements}
-\todo{Add acknowledgements to the Allan Hills field, ice-core, radar, and modeling teams and relevant funding programs.}
+To be completed before submission. Support and contributions from NSF COLDEX and collaborating investigators should be documented here.
 
 \appendix
-\section{Derivation of the curvature equation}
 
-Starting from
-\[
-\kappa=\frac{N}{q^3},
-\qquad
-N=\det(\Tvec,\Kvec),
-\qquad
-q=|\Tvec|,
-\]
-we have
+\section{Inverse-coordinate identities}
+\label{app:inverse}
+
+Equation~\eqref{eq:agepsiJacobian} can be written
 \begin{equation}
-\Dt q=\frac{\Tvec\cdot\Lten\Tvec}{q}=q\,\pvec\cdot\Dten\pvec=q\epsilon_t.
+\begin{pmatrix}
+\tau_x & \tau_z\\
+\psi_x & \psi_z
+\end{pmatrix}
+\begin{pmatrix}
+\dd x\\
+\dd z
+\end{pmatrix}
+=
+\begin{pmatrix}
+\dd\tau\\
+\dd\psi
+\end{pmatrix},
+\qquad
+\det=1.
 \end{equation}
-Using Equations~\eqref{eq:T_evolution} and \eqref{eq:K_evolution},
-\begin{align}
-\Dt N
-&=\det(\Lten\Tvec,\Kvec)
-+\det(\Tvec,\Lten\Kvec)
-+\det\left(\Tvec,(\nabla\Lten):(\Tvec\otimes\Tvec)\right)\\
-&=(\tr\Lten)N
-+q^3\nvec\cdot\left[(\nabla\nabla\vel):(\pvec\otimes\pvec)\right].
-\end{align}
+The inverse transformation is
+\begin{equation}
+\begin{pmatrix}
+\dd x\\
+\dd z
+\end{pmatrix}
+=
+\begin{pmatrix}
+\psi_z & -\tau_z\\
+-\psi_x & \tau_x
+\end{pmatrix}
+\begin{pmatrix}
+\dd\tau\\
+\dd\psi
+\end{pmatrix}
+=
+\begin{pmatrix}
+ u & -\tau_z\\
+ w & \tau_x
+\end{pmatrix}
+\begin{pmatrix}
+\dd\tau\\
+\dd\psi
+\end{pmatrix}.
+\label{eq:inversemap}
+\end{equation}
 Therefore
-\begin{align}
-\Dt\kappa
-&=q^{-3}\Dt N-3Nq^{-4}\Dt q\\
-&=(\tr\Lten-3\epsilon_t)\kappa
-+\nvec\cdot\left[(\nabla\nabla\vel):(\pvec\otimes\pvec)\right],
-\end{align}
-which reduces to Equation~\eqref{eq:kappa_incompressible} when $\nabla\cdot\vel=0$.
-
-\section{Relation between slope and whole-curve descriptions}
-
-For a layer that can locally be written as $z=h(x,t)$,
-\[
-\Tvec\propto(1,m),
-\qquad
-m=\partial_x h.
-\]
-The signed curvature is
 \begin{equation}
-\kappa=\frac{\partial_x m}{(1+m^2)^{3/2}}.
+ x_{\tau}|_{\psi}=u,
+ \quad
+ z_{\tau}|_{\psi}=w,
+ \quad
+ x_{\psi}|_{\tau}=-\tau_z,
+ \quad
+ z_{\psi}|_{\tau}=\tau_x.
 \end{equation}
-Thus WBA evolves the local orientation variable $m$, whereas the curvature model evolves its arclength derivative. A finite-width disturbance requires the field $m(x,t)$, not one scalar slope. The overturning condition $x_a=0$ corresponds to $|m|\rightarrow\infty$ in graph coordinates.
+The first two identities state that advancing one unit in age at fixed streamline follows the velocity for one unit of time. The latter two specify the equal-age tangent. Multiplication by \(\dd\psi/\dd x_0=\dot a_0\) yields Equation~\eqref{eq:Jage} and the corresponding vertical tangent component.
 
-\bibliographystyle{plainnat}
-\bibliography{references}
+\section{Extension to steady variable-density flow}
+\label{app:density}
+
+Below the firn, glacier ice is accurately treated as incompressible with nearly constant density. The coordinate construction extends to a steady variable-density flow satisfying
+\begin{equation}
+\nabla\cdot(\rho\uvec)=0.
+\end{equation}
+Define the mass-flux streamfunction by
+\begin{equation}
+\rho u=\psi_z,
+\qquad
+\rho w=-\psi_x.
+\end{equation}
+Then
+\begin{equation}
+\frac{\partial(\tau,\psi)}{\partial(x,z)}
+=\rho(u\tau_x+w\tau_z)=\rho.
+\end{equation}
+The mapping remains nonsingular for \(\rho>0\), and the same order interpretation follows after replacing volume flux by mass flux. The constant-density formula used in the main text is therefore not conceptually tied to strict incompressibility, although the weights in the cumulative integral acquire density factors.
+
+\section{First-order periodic cancellation about plug flow}
+\label{app:periodic}
+
+Let
+\begin{equation}
+ u(x,z;\epsilon_b)=U_b+\epsilon_b u_1(x,z)+O(\epsilon_b^2),
+ \qquad U_b>0,
+\end{equation}
+where \(U_b\) is spatially uniform and \(u_1\) is periodic in \(x\) with wavelength \(2\pi/k\) and zero horizontal mean at each elevation. Then
+\begin{equation}
+ u_z=\epsilon_b u_{1,z}+O(\epsilon_b^2),
+ \qquad
+ u^{-3}=U_b^{-3}+O(\epsilon_b).
+\end{equation}
+Because the background integrand is identically zero, the \(O(\epsilon_b)\) displacement of the trajectory affects the integral only at \(O(\epsilon_b^2)\). Evaluating the first-order term along the unperturbed streamline \(z=z_0\) gives
+\begin{equation}
+\int_x^{x+2\pi/k}\frac{u_z}{u^3}\,\dd\xi
+=\frac{\epsilon_b}{U_b^3}
+\int_x^{x+2\pi/k}u_{1,z}(\xi,z_0)\,\dd\xi
++O(\epsilon_b^2)
+=O(\epsilon_b^2),
+\end{equation}
+because differentiation with respect to \(z\) preserves the zero horizontal mean of \(u_1\). This establishes Equation~\eqref{eq:periodiccancel}. For a vertically sheared background, trajectory displacement can act on the nonzero background integrand at first order, so the cancellation does not follow without additional assumptions.
+
+\printbibliography[title={References}]
 
 \end{document}
