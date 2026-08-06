@@ -15,6 +15,7 @@
 \usepackage{csquotes}
 \usepackage{amsmath,amssymb,mathtools,bm}
 \usepackage{booktabs,tabularx,array}
+\usepackage{graphicx}
 \usepackage{tikz}
 \usetikzlibrary{arrows.meta,calc,intersections,patterns,positioning}
 \usepackage[mathlines]{lineno}
@@ -789,6 +790,41 @@ A robust implementation should include four checks. First, compare Equation~\eqr
 
 For transient flow, Equation~\eqref{eq:Jdiagnostic} is not valid because the steady travel-time representation fails. The corresponding calculation should integrate the deformation of the two-parameter deposition map through time. Nevertheless, the steady order budget remains useful as a baseline and as a diagnostic applied to quasi-steady snapshots.
 
+\section{Numerical Examples}
+\label{sec:numericalexamples}
+
+We use two-dimensional full-Stokes calculations to illustrate the order diagnostic. These calculations test the mechanics in a controlled geometry; they are not reconstructions of Allan Hills or another old-ice site. The periodic domain is \(800~\mathrm{m}\) long and \(160~\mathrm{m}\) thick. Ice obeys Glen's flow law with \(n=3\), the bed is fixed and no slip, and the flat upper surface is traction free. Gravity acts at a surface slope of \(0.03~\mathrm{rad}\). The rate factor gives a flat-slab surface speed of \(0.0138~\mathrm{m\,yr^{-1}}\), and the effective strain rate is regularized at \(10^{-10}~\mathrm{yr^{-1}}\). We solve for velocity and pressure on \(48\) by \(10\) structured mesh divisions using Taylor--Hood elements, with quadratic velocity and linear pressure, and obtain the nonlinear solution by continuation through \(n=1,2,3\). The surface is held steady by diagnosing the accumulation rate from the kinematic boundary condition, \(\dot a=-w\big|_{z=H}\). Trajectories begin only where \(\dot a>0\), so that \(x_0\) remains a physical surface-origin coordinate.
+
+The first calculation compares a \(16~\mathrm{m}\)-high symmetric obstacle with an \(80~\mathrm{m}\)-high asymmetric obstacle (Figure~\ref{fig:numericalbudget}). Both obstacles have raised-cosine profiles. The symmetric obstacle has \(100~\mathrm{m}\) half-widths; the asymmetric obstacle has \(50~\mathrm{m}\) and \(150~\mathrm{m}\) upstream and downstream half-widths. Five trajectories sample the cumulative positive accumulation flux in each case. The symmetric obstacle produces little reverse-shear expenditure: the minimum value of \(\orderfactor\) is \(0.9966\). The asymmetric obstacle produces a broader region of reverse vertical shear. Along the most strongly affected trajectory, \(\Rneg=0.1705\) and \(\orderfactor=0.8295\). Thus the obstacle changes the spacing and dip of the layers, but it does not exhaust the order budget or produce a vertical tangent in this calculation.
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=\textwidth]{../figures/full_stokes_order_budget.png}
+\caption{Full-Stokes order-budget examples. The left panels show vertical shear and five surface-origin trajectories for a low symmetric obstacle and a larger asymmetric obstacle. The right panels show the positive-shear contribution \(\Rpos\), reverse-shear expenditure \(\Rneg\) and remaining order budget \(\orderfactor\) for the trajectory with the lowest final budget in each case. Local reverse shear is appreciable for the asymmetric obstacle, but \(\orderfactor\) remains positive.}
+\label{fig:numericalbudget}
+\end{figure}
+
+We also check the exact identity in Equation~\eqref{eq:JPR} against a separate numerical calculation. For each trajectory, we estimate \(\Jord\) by tracing equal-age particles from \(x_0\pm0.05~\mathrm{m}\). This finite-difference estimate agrees with \((u/u_{s0})\orderfactor\) to a maximum relative error of \(6.6\times10^{-4}\) (Figure~\ref{fig:numericalverification}). The comparison tests the trajectory integration and the cumulative shear budget without solving the age equation.
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=0.56\textwidth]{../figures/order_identity_verification.png}
+\caption{Independent evaluation of the order Jacobian. The horizontal axis uses equal-age trajectories initialized at \(x_0\pm0.05~\mathrm{m}\); the vertical axis uses Equation~\eqref{eq:JPR}. The line shows equality.}
+\label{fig:numericalverification}
+\end{figure}
+
+The second calculation narrows the minimum ice thickness above the asymmetric obstacle from \(144\) to \(2~\mathrm{m}\) (Figure~\ref{fig:numericalstagnation}). We follow the trajectory at \(70\%\) of the cumulative positive accumulation flux. As the gap narrows, its minimum horizontal speed decreases from \(0.0128\) to \(0.0020~\mathrm{m\,yr^{-1}}\), its travel time increases from \(35\) to \(178~\mathrm{kyr}\), and its order budget decreases from \(0.998\) to \(0.705\). The reverse-shear contribution grows, but the sampled surface-origin trajectory remains ordered.
+
+The \(2~\mathrm{m}\) gap also produces a near-stagnant zone next to the no-slip bed. On meshes with \(48\), \(72\) and \(96\) horizontal elements, the minimum sampled horizontal velocities are \(-0.423\), \(-0.037\) and \(-0.022~\mathrm{\mu m\,yr^{-1}}\), respectively. The negative magnitude decreases under refinement, so the calculation does not resolve reverse flow or a recirculating eddy. It instead shows that velocity near the obstacle approaches a scale at which the \(u^{-2}\) trajectory diagnostic becomes resolution sensitive. We therefore stop the physical interpretation at near-stagnation. Distinguishing slow throughflow from recirculation in this setting would require local mesh refinement and, for an old-ice site, three-dimensional geometry.
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=\textwidth]{../figures/full_stokes_near_stagnation.png}
+\caption{Approach to near-stagnation. (a) Horizontal speed and the sampled surface-origin trajectory for a \(2~\mathrm{m}\) gap. (b) Positive shear, reverse shear and the order budget as the gap narrows. (c) Minimum horizontal speed along the surface-origin trajectory. (d) Minimum near-bed velocity sampled on three meshes. The negative values approach zero with refinement and do not establish a resolved flow reversal.}
+\label{fig:numericalstagnation}
+\end{figure}
+
+\clearpage
 \section{Discussion}
 
 \subsection{A theorem about deposition order, not about curvature}
@@ -815,7 +851,7 @@ Several components of this manuscript are established. Equation~\eqref{eq:agepsi
 
 The analysis therefore reformulates established age--streamfunction and thinning theory for use with numerical velocity fields. Its distinct result is the physical-space identity that writes signed inverse thinning as a cumulative \(u_z/u^3\) integral. The positive--negative decomposition in Equations~\eqref{eq:Pdef}--\eqref{eq:ordercondition} then gives the full-Stokes residual threshold in Equation~\eqref{eq:FSfailure}, the localized-obstacle bound in Equation~\eqref{eq:obstaclebound}, the plug-flow cancellation result in Equation~\eqref{eq:periodiccancel} and the split trajectory diagnostic in Equation~\eqref{eq:Jdiagnostic}. These results are a cautious extension of Parrenin--Hindmarsh theory rather than a universal theorem about incompressible Stokes flow.
 
-The next test is to apply the diagnostic to reconstructed Allan Hills geometry and flow history. An order budget that remains well above zero would exclude fixed roughness as the cause of overturning, whereas a trajectory crossing \(\Jord=0\) would identify where steady deformation is sufficient. Layer attitudes, age reversals and fabric provide independent observations against which to evaluate either result.
+The idealized calculations in Section~\ref{sec:numericalexamples} verify the diagnostic but do not test Allan Hills geometry. The next step is to apply it to reconstructed geometry and flow history. An order budget that remains well above zero would exclude fixed roughness as the cause of overturning, whereas a trajectory crossing \(\Jord=0\) would identify where steady deformation is sufficient. Layer attitudes, age reversals and fabric provide independent observations against which to evaluate either result.
 
 \subsection{Limitations}
 
@@ -834,6 +870,8 @@ Most importantly, the theorem diagnoses overturning of a continuous material iso
 
   \item The shallow-ice regime preserves order (Equation~\eqref{eq:SIAorder}). A non-stagnant localized obstacle obeys the speed-and-shear bound in Equation~\eqref{eq:obstaclebound}, and small-amplitude periodic roughness about a uniform plug-flow background has no first-order net order change over a complete wavelength (Equation~\eqref{eq:periodiccancel}).
 
+  \item The idealized full-Stokes examples are consistent with these predictions (Figures~\ref{fig:numericalbudget}--\ref{fig:numericalstagnation}). An asymmetric obstacle reduces the sampled order budget to \(0.8295\), while narrowing the remaining ice gap to \(2~\mathrm{m}\) reduces it to \(0.705\). Neither calculation produces a vertical tangent, and the apparent near-bed flow reversal does not converge under mesh refinement.
+
   \item The theory converts the intuition that fixed obstacles produce draping rather than folds into a conditional, testable statement. In ordinary fast, shallow throughflow, boundary or rheological changes are effectively required to seed recumbent folding. In slow, rough, near-stagnant full-Stokes flow, fixed geometry remains a viable mechanism until the cumulative diagnostic in Equation~\eqref{eq:Jdiagnostic} is evaluated.
 
   \item For NSF COLDEX at Allan Hills, the next calculation is to integrate \(\Rpos\), \(\Rneg\) and \(\Jord\) along reconstructed source-to-core trajectories using Equations~\eqref{eq:trajectory}--\eqref{eq:Jdiagnostic}. A three-dimensional material map is required where cross-flow or multiple source regions are important. The same diagnostic can test stratigraphic order at continuous old-ice sites such as Beyond EPICA.
@@ -843,7 +881,7 @@ Most importantly, the theorem diagnoses overturning of a continuous material iso
 No new observational data are presented. The analytical results are fully specified by the equations in this manuscript. The numerical diagnostic requires a model velocity field and its vertical derivative.
 
 \section*{Code availability}
-No software is included with this theoretical draft. Equations~\eqref{eq:trajectory}--\eqref{eq:Jdiagnostic} provide a direct implementation specification for particle-tracking codes.
+Two executed notebooks in the \texttt{notebooks} directory accompany this manuscript. They contain the full-Stokes solves, trajectory calculations, numerical checks and figure generation.
 
 \section*{Author contribution}
 Bradley Paul Lipovsky developed the analysis and wrote the manuscript draft.
