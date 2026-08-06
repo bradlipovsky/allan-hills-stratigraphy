@@ -793,7 +793,7 @@ For transient flow, Equation~\eqref{eq:Jdiagnostic} is not valid because the ste
 \section{Numerical Examples}
 \label{sec:numericalexamples}
 
-We use two-dimensional full-Stokes calculations to illustrate the order diagnostic. These calculations test the mechanics in a controlled geometry; they are not reconstructions of Allan Hills or another old-ice site. The periodic domain is \(800~\mathrm{m}\) long and \(160~\mathrm{m}\) thick. Ice obeys Glen's flow law with \(n=3\), the bed is fixed and no slip, and the flat upper surface is traction free. Gravity acts at a surface slope of \(0.03~\mathrm{rad}\). The rate factor gives a flat-slab surface speed of \(0.0138~\mathrm{m\,yr^{-1}}\), and the effective strain rate is regularized at \(10^{-10}~\mathrm{yr^{-1}}\). We solve for velocity and pressure on \(48\) by \(10\) structured mesh divisions using Taylor--Hood elements, with quadratic velocity and linear pressure, and obtain the nonlinear solution by continuation through \(n=1,2,3\). The surface is held steady by diagnosing the accumulation rate from the kinematic boundary condition, \(\dot a=-w\big|_{z=H}\). Trajectories begin only where \(\dot a>0\), so that \(x_0\) remains a physical surface-origin coordinate.
+We use two-dimensional full-Stokes calculations to illustrate both preservation and reversal of isochrone order. These calculations test the mechanics in controlled geometries; they are not reconstructions of Allan Hills or another old-ice site. The first two calculations use a periodic domain that is \(800~\mathrm{m}\) long and \(160~\mathrm{m}\) thick. Ice obeys Glen's flow law with \(n=3\), the bed is fixed and no slip, and the flat upper surface is traction free. Gravity acts at a surface slope of \(0.03~\mathrm{rad}\). The rate factor gives a flat-slab surface speed of \(0.0138~\mathrm{m\,yr^{-1}}\), and the effective strain rate is regularized at \(10^{-10}~\mathrm{yr^{-1}}\). We solve for velocity and pressure on \(48\) by \(10\) structured mesh divisions using Taylor--Hood elements, with quadratic velocity and linear pressure, and obtain the nonlinear solution by continuation through \(n=1,2,3\). The surface is held steady by diagnosing the accumulation rate from the kinematic boundary condition, \(\dot a=-w\big|_{z=H}\). Trajectories begin only where \(\dot a>0\), so that \(x_0\) remains a physical surface-origin coordinate.
 
 The first calculation compares a \(16~\mathrm{m}\)-high symmetric obstacle with an \(80~\mathrm{m}\)-high asymmetric obstacle (Figure~\ref{fig:numericalbudget}). Both obstacles have raised-cosine profiles. The symmetric obstacle has \(100~\mathrm{m}\) half-widths; the asymmetric obstacle has \(50~\mathrm{m}\) and \(150~\mathrm{m}\) upstream and downstream half-widths. Five trajectories sample the cumulative positive accumulation flux in each case. The symmetric obstacle produces little reverse-shear expenditure: the minimum value of \(\orderfactor\) is \(0.9966\). The asymmetric obstacle produces a broader region of reverse vertical shear. Along the most strongly affected trajectory, \(\Rneg=0.1705\) and \(\orderfactor=0.8295\). Thus the obstacle changes the spacing and dip of the layers, but it does not exhaust the order budget or produce a vertical tangent in this calculation.
 
@@ -824,6 +824,19 @@ The \(2~\mathrm{m}\) gap also produces a near-stagnant zone next to the no-slip 
 \label{fig:numericalstagnation}
 \end{figure}
 
+The obstacle calculations preserve order and therefore serve as negative controls. A positive control is needed to show the geometry and sign change of an overturned isochrone. We use the two-stage mechanism of \textcite{Waddington2001}: a transient process first creates a finite wrinkle, after which ordinary surface-fast shear rotates its downstream-dipping limb through vertical. The full-Stokes domain is a \(6~\mathrm{km}\)-long and \(500~\mathrm{m}\)-thick parallel-sided slab with the same surface slope, no-slip bed, traction-free surface and \(n=3\) rheology. Analytical slab velocities are imposed at the two sides. Calculations on \(48\) by \(8\) and \(96\) by \(16\) mesh divisions give maximum vertical shear rates of \(1.071\times10^{-3}\) and \(1.077\times10^{-3}~\mathrm{yr^{-1}}\), respectively.
+
+The initial isochrones are non-intersecting sinusoids with \(25~\mathrm{m}\) amplitude and \(500~\mathrm{m}\) wavelength. Their maximum initial dip is \(17.4^\circ\). The first material segment reaches \(\partial x/\partial X=0\), and hence a vertical tangent, after \(3.2~\mathrm{kyr}\). At \(25~\mathrm{kyr}\), the fine calculation contains \(4544\) segments with \(\partial x/\partial X<0\), whereas the initially flat control contains none. Figure~\ref{fig:numericaloverturning} shows the resulting recumbent isochrons and multiple age reversals along a vertical synthetic core. The numerical age values are schematic; the sign of \(\partial x/\partial X\) establishes overturning independently of that age scale.
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=\textwidth]{../figures/full_stokes_overturned_isochrons.png}
+\caption{Overturned isochrons in the full-Stokes positive control. (a) The initially ordered isochrons after \(25~\mathrm{kyr}\) of advection through the \(n=3\) slab velocity field. The downstream-dipping limbs have rotated through vertical and become recumbent. The dashed line marks the synthetic core. (b) Repeated intersections of the overturned isochrons produce age reversals in the core. The nominal ages are schematic. (c) The minimum horizontal material derivative reaches zero after \(3.2~\mathrm{kyr}\) and is negative thereafter. This sign change, rather than layer relief alone, diagnoses overturning.}
+\label{fig:numericaloverturning}
+\end{figure}
+
+This positive control does not contradict the steady order theorem. Its sinusoidal isochrones are an inherited disturbance rather than the exact steady age field associated with the slab velocity. The calculation instead illustrates the finite-amplitude fold mechanism that becomes available when time-dependent geometry or another process has already supplied a seed.
+
 \clearpage
 \section{Discussion}
 
@@ -851,7 +864,7 @@ Several components of this manuscript are established. Equation~\eqref{eq:agepsi
 
 The analysis therefore reformulates established age--streamfunction and thinning theory for use with numerical velocity fields. Its distinct result is the physical-space identity that writes signed inverse thinning as a cumulative \(u_z/u^3\) integral. The positive--negative decomposition in Equations~\eqref{eq:Pdef}--\eqref{eq:ordercondition} then gives the full-Stokes residual threshold in Equation~\eqref{eq:FSfailure}, the localized-obstacle bound in Equation~\eqref{eq:obstaclebound}, the plug-flow cancellation result in Equation~\eqref{eq:periodiccancel} and the split trajectory diagnostic in Equation~\eqref{eq:Jdiagnostic}. These results are a cautious extension of Parrenin--Hindmarsh theory rather than a universal theorem about incompressible Stokes flow.
 
-The idealized calculations in Section~\ref{sec:numericalexamples} verify the diagnostic but do not test Allan Hills geometry. The next step is to apply it to reconstructed geometry and flow history. An order budget that remains well above zero would exclude fixed roughness as the cause of overturning, whereas a trajectory crossing \(\Jord=0\) would identify where steady deformation is sufficient. Layer attitudes, age reversals and fabric provide independent observations against which to evaluate either result.
+The idealized calculations in Section~\ref{sec:numericalexamples} verify the diagnostic and show the recumbent geometry that follows from a sign reversal, but they do not test Allan Hills geometry. The next step is to apply the diagnostic to reconstructed geometry and flow history and to identify a physical source for any inherited disturbance. An order budget that remains well above zero would exclude fixed roughness as the cause of overturning, whereas a trajectory crossing \(\Jord=0\) would identify where steady deformation is sufficient. Layer attitudes, age reversals and fabric provide independent observations against which to evaluate either result.
 
 \subsection{Limitations}
 
@@ -870,7 +883,7 @@ Most importantly, the theorem diagnoses overturning of a continuous material iso
 
   \item The shallow-ice regime preserves order (Equation~\eqref{eq:SIAorder}). A non-stagnant localized obstacle obeys the speed-and-shear bound in Equation~\eqref{eq:obstaclebound}, and small-amplitude periodic roughness about a uniform plug-flow background has no first-order net order change over a complete wavelength (Equation~\eqref{eq:periodiccancel}).
 
-  \item The idealized full-Stokes examples are consistent with these predictions (Figures~\ref{fig:numericalbudget}--\ref{fig:numericalstagnation}). An asymmetric obstacle reduces the sampled order budget to \(0.8295\), while narrowing the remaining ice gap to \(2~\mathrm{m}\) reduces it to \(0.705\). Neither calculation produces a vertical tangent, and the apparent near-bed flow reversal does not converge under mesh refinement.
+  \item The idealized full-Stokes examples are consistent with these predictions. An asymmetric obstacle reduces the sampled order budget to \(0.8295\), while narrowing the remaining ice gap to \(2~\mathrm{m}\) reduces it to \(0.705\) (Figures~\ref{fig:numericalbudget}--\ref{fig:numericalstagnation}). Neither steady-obstacle calculation produces a vertical tangent. In contrast, a \(17.4^\circ\) inherited wrinkle reaches a vertical tangent after \(3.2~\mathrm{kyr}\) and develops overturned isochrons under ordinary surface-fast shear (Figure~\ref{fig:numericaloverturning}).
 
   \item The theory converts the intuition that fixed obstacles produce draping rather than folds into a conditional, testable statement. In ordinary fast, shallow throughflow, boundary or rheological changes are effectively required to seed recumbent folding. In slow, rough, near-stagnant full-Stokes flow, fixed geometry remains a viable mechanism until the cumulative diagnostic in Equation~\eqref{eq:Jdiagnostic} is evaluated.
 
@@ -881,7 +894,7 @@ Most importantly, the theorem diagnoses overturning of a continuous material iso
 No new observational data are presented. The analytical results are fully specified by the equations in this manuscript. The numerical diagnostic requires a model velocity field and its vertical derivative.
 
 \section*{Code availability}
-Two executed notebooks in the \texttt{notebooks} directory accompany this manuscript. They contain the full-Stokes solves, trajectory calculations, numerical checks and figure generation.
+Three executed notebooks in the \texttt{notebooks} directory accompany this manuscript. They contain the full-Stokes solves, trajectory calculations, numerical checks and figure generation.
 
 \section*{Author contribution}
 Bradley Paul Lipovsky developed the analysis and wrote the manuscript draft.
