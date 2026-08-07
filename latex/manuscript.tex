@@ -1,33 +1,22 @@
-% The official International Glaciological Society class is not installed in
-% this execution environment. This review-format source follows Journal of
-% Glaciology conventions (author-year citations, numbered equations, SI units,
-% line numbers, and an abstract below 200 words). Replace `article' with the
-% current IGS class at submission if required by the journal.
-\documentclass[12pt]{article}
+\documentclass[review]{igs}
 
-\usepackage[a4paper,margin=25mm]{geometry}
 \usepackage[T1]{fontenc}
 \usepackage[utf8]{inputenc}
 \usepackage{amsthm}
-\usepackage{lmodern}
 \usepackage{microtype}
 \usepackage[english]{babel}
-\usepackage{csquotes}
 \usepackage{amsmath,amssymb,mathtools,bm}
 \usepackage{booktabs,tabularx,array}
 \usepackage{graphicx}
 \usepackage{tikz}
 \usetikzlibrary{arrows.meta,calc,intersections,patterns,positioning}
-\usepackage[mathlines]{lineno}
-\usepackage{setspace}
 \usepackage{enumitem}
-\usepackage[authoryear,round]{natbib}
+\usepackage[authoryear,round]{igsnatbib}
 \newcommand{\parencite}{\citep}
 \newcommand{\textcite}{\citet}
 
-\onehalfspacing
 \setlength{\emergencystretch}{2em}
-\modulolinenumbers[5]
+\setcounter{secnumdepth}{2}
 
 \newtheorem{theorem}{Theorem}
 \newtheorem{corollary}{Corollary}
@@ -49,22 +38,17 @@
 \newcommand{\orderfactor}{\mathcal{B}}
 \newcommand{\negpart}[1]{\left[#1\right]_{-}}
 
-\title{\textbf{Isochrone overturning in steady glacier flow}\\
-\large A cumulative reverse-shear criterion for full-Stokes flow}
-\author{Bradley Paul Lipovsky\\
-\small Department of Earth and Space Sciences, University of Washington, Seattle, USA\\
-\small Correspondence: \texttt{bpl7@uw.edu}}
-\date{}
+\title[Isochrone overturning]{Isochrone overturning in steady glacier flow}
+\author[Lipovsky]{Bradley Paul LIPOVSKY}
+\affiliation{Department of Earth and Space Sciences, University of Washington, Seattle, USA\\
+Correspondence: Bradley Paul Lipovsky, \texttt{bpl7@uw.edu}}
 
 \begin{document}
+\abstract{Ancient ice recovered at Allan Hills extends into the Miocene, but steep layers, age reversals and small-scale folds complicate its interpretation. Existing steady-flow theory shows that isochrones cannot overturn where horizontal speed increases upward. Full-Stokes flow over rough beds can contain local extrusion, so this pointwise condition is stronger than necessary. Here, we derive a signed order Jacobian that measures whether particles deposited in sequence retain their horizontal order along an isochrone. Stratigraphic order depends on the cumulative competition between normal and reverse vertical shear, weighted most strongly where horizontal motion is slow. Reverse shear must erase both the ordering imposed at deposition and the accumulated normal shear before a layer becomes vertical. Full-Stokes mechanics provides no universal sign guarantee, although shallow-ice flow preserves order. We derive a full-Stokes threshold, bounds for non-stagnant localized obstacles, a first-order cancellation result for periodic roughness about plug flow and a trajectory diagnostic. Idealized full-Stokes calculations then produce recumbent folds directly from an ordered surface-deposition map, without an inherited layer perturbation. These results distinguish topographic draping from overturning at Allan Hills and other old-ice sites.}
+
 \maketitle
-\linenumbers
 
-\begin{abstract}
-Ancient ice recovered at Allan Hills extends into the Miocene, but steep layers, age reversals and small-scale folds complicate its interpretation. Existing steady-flow theory shows that isochrones cannot overturn where horizontal speed increases upward. Full-Stokes flow over rough beds can contain local extrusion, so this pointwise condition is stronger than necessary. Here, we derive a signed order factor that measures whether particles deposited in sequence retain their horizontal order along an isochrone. Stratigraphic order depends on the cumulative competition between normal and reverse vertical shear, weighted most strongly where horizontal motion is slow. Reverse shear must erase both the ordering imposed at deposition and the accumulated normal shear before a layer becomes vertical. Full-Stokes mechanics provides no universal sign guarantee, although shallow-ice flow preserves order. We derive a full-Stokes threshold, bounds for non-stagnant localized obstacles, a first-order cancellation result for periodic roughness about plug flow and a trajectory diagnostic. Idealized full-Stokes calculations then produce recumbent folds directly from an ordered surface-deposition map, without an inherited layer perturbation. These results distinguish topographic draping from overturning at Allan Hills and other old-ice sites.
-\end{abstract}
-
-\noindent\textbf{Keywords:} ice stratigraphy; recumbent folds; Allan Hills; NSF COLDEX; full-Stokes flow; extrusion flow; age equation; blue ice
+\noindent\textbf{Keywords:} glacier flow; ice stratigraphy; recumbent folds; blue ice; full-Stokes modelling
 
 \section{Introduction}
 
@@ -78,20 +62,11 @@ These statements concern different parts of the layer geometry. A material tange
 
 The local theory of \textcite{Waddington2001}, hereafter WBA, formalized how a pre-existing wrinkle is flattened by longitudinal extension or overturned by shear. WBA also stated the key qualitative principle that layers spending their entire history in a steady-state flow field are not passively folded; a transient process must first create a disturbance relative to the steady stratigraphy. \textcite{JacobsonWaddington2004} replaced the local criterion with finite-strain integration along trajectories, and \textcite{JacobsonWaddington2005} showed that divide migration can place an inherited Raymond arch in a shear regime that turns it into a recumbent fold. For steady stratigraphy, \textcite{ParreninHindmarshRemy2006} introduced logarithmic flux coordinates for analytical age solutions, and \textcite{ParreninHindmarsh2007} generalized the construction to horizontally non-uniform velocity profiles. Their Appendix A showed that an isochrone cannot pass through vertical when horizontal velocity increases monotonically upward. Corrections for flow-induced layer thinning date at least to \textcite{Nye1963} and the early depth--age model of \textcite{DansgaardJohnsen1969}. The same characteristic framework subsequently underpinned numerical age solvers \parencite{HindmarshLeysingerVieliParrenin2009,ParreninChungMartin2025} and an explicit vertical thinning function \parencite{Parrenin2013,ParreninChungMartin2025}.
 
-Monotonic upward speed is sufficient but not necessary for preserving order because full-Stokes glacier flow does not impose \(u_z\geq0\) pointwise. The relevant quantity is cumulative: how much reverse shear can a particle experience before the depositional ordering of the isochrone is lost? We answer this question for steady two-dimensional flow by:
+Monotonic upward speed is sufficient but not necessary for preserving order because full-Stokes glacier flow does not impose \(u_z\geq0\) pointwise. The relevant quantity is cumulative: how much reverse shear can a particle experience before the depositional ordering of the isochrone is lost? Here, we derive a physical-coordinate representation of the signed inverse vertical-thinning factor and interpret it as horizontal order along an isochrone. The resulting budget separates surface-fast and reverse vertical shear. We then decompose the reverse-shear contribution using the full-Stokes stress balance, identify regimes in which glacier mechanics preserves order, and obtain a sufficient no-overturning bound for localized obstacles and a first-order cancellation result for periodic small-amplitude roughness. Finally, we formulate a trajectory diagnostic and construct steady full-Stokes examples in which surface-generated isochrones overturn without an inherited perturbation.
 
-\begin{enumerate}[leftmargin=*,label=(\roman*)]
-  \item derive a physical-coordinate representation of the signed inverse vertical-thinning factor and its interpretation as horizontal order along an isochrone;
-  \item express its sign as a cumulative competition between surface-fast and reverse vertical shear;
-  \item decompose the reverse-shear budget using the full-Stokes stress balance;
-  \item identify regimes in which ordinary glacier mechanics guarantees order and regimes in which it does not;
-  \item derive a sufficient no-overturning bound for localized obstacles and a first-order cancellation result for periodic small-amplitude roughness; and
-  \item formulate a direct trajectory diagnostic and construct steady full-Stokes examples in which surface-generated isochrones overturn without an inherited perturbation.
-\end{enumerate}
+The analysis builds directly on established results. The monotonic-shear no-overturning condition is due to \textcite{ParreninHindmarsh2007}; the order Jacobian derived below is the reciprocal of the vertical thinning function developed by \textcite{Parrenin2013} and implemented by \textcite{ParreninChungMartin2025}; the local wrinkle criterion and finite-strain interpretation are due to WBA and \textcite{JacobsonWaddington2004}; and rough-bed extrusion is established \parencite{Gudmundsson1997linear}. The paper first relates these descriptions of folding, then derives the exact order budget, examines its mechanical constraints, and tests its two predicted overturning routes in idealized calculations. The distinct step is to write the sign of inverse thinning as an exact positive--negative \(u_z/u^3\) shear budget. This form extends steady-isochrone theory without introducing a new state variable or claiming a universal no-folding theorem.
 
-The analysis builds directly on established results. The monotonic-shear no-overturning condition is due to \textcite{ParreninHindmarsh2007}; the order factor derived below is the reciprocal of the vertical thinning function developed by \textcite{Parrenin2013} and implemented by \textcite{ParreninChungMartin2025}; the local wrinkle criterion and finite-strain interpretation are due to WBA and \textcite{JacobsonWaddington2004}; and rough-bed extrusion is established \parencite{Gudmundsson1997linear}. Here, we write the sign of the inverse thinning factor as an exact positive--negative \(u_z/u^3\) shear budget. This form gives a full-Stokes residual threshold, localized-obstacle bounds, a restricted periodic-cancellation result and a trajectory diagnostic. The numerical examples use the diagnostic to construct steady, boundary-generated folds rather than to amplify a prescribed material wrinkle. These results extend steady-isochrone theory without introducing a new state variable or a universal no-folding theorem.
-
-\section{Previous descriptions of stratigraphic folding}
+\section{Existing criteria for stratigraphic folding}
 
 \subsection{Passive and active folding}
 
@@ -685,7 +660,7 @@ Appendix~\ref{app:periodic} gives the expansion leading to Equation~\eqref{eq:pe
 
 Cancellation is not guaranteed for a sheared background, a solitary asymmetric obstacle, a finite path ending mid-cycle, strongly nonlinear roughness or near-stagnant trajectories. Equation~\eqref{eq:periodiccancel} is therefore a restricted asymptotic result, not a general symmetry theorem.
 
-\section{Overturning mechanisms and limits of the assumptions}
+\section{Steady overturning and limits of the assumptions}
 
 The theorem does not fail when assumptions (A1)--(A4) hold. Instead, it predicts whether the order budget remains positive or reaches the vertical-tangent threshold. This section first describes overturning within the theorem and then identifies settings in which one or more assumptions are not satisfied, so that the two-dimensional steady coordinate construction does not apply.
 
@@ -752,7 +727,7 @@ For old-ice stratigraphic interpretation, the equations define four tests of whe
 
 This hierarchy distinguishes regimes in which changing boundary conditions are mechanically required. In regular, shallow, non-stagnant flow, Equation~\eqref{eq:obstaclebound} keeps the order budget well above zero, so a time-dependent or rheological mechanism is needed. In more general full-Stokes flow, sufficiently cumulative extrusion or loss of one-way flow can overturn steady isochrones without a boundary change.
 
-\section{Numerical diagnostic for full-Stokes models}
+\section{Trajectory diagnostic for full-Stokes models}
 
 The order criterion can be evaluated without explicitly solving the age equation or advecting a dense family of isochrones. Start trajectories in a surface accumulation zone and record \(x_0\), \(\dot a_0\) and \(u_{s0}\). With \(t\) denoting time since deposition, integrate along each trajectory
 \begin{align}
@@ -790,10 +765,10 @@ A robust implementation should include four checks. First, compare Equation~\eqr
 
 For transient flow, Equation~\eqref{eq:Jdiagnostic} is not valid because the steady travel-time representation fails. The corresponding calculation should integrate the deformation of the two-parameter deposition map through time. Nevertheless, the steady order budget remains useful as a baseline and as a diagnostic applied to quasi-steady snapshots.
 
-\section{Numerical Examples}
+\section{Full-Stokes numerical examples}
 \label{sec:numericalexamples}
 
-We use two-dimensional full-Stokes calculations to construct recumbent folds without prescribing an internal layer perturbation. These calculations isolate mechanisms in controlled geometries; they are not reconstructions of Allan Hills or another old-ice site. The domain is periodic, \(800~\mathrm{m}\) long and \(160~\mathrm{m}\) thick, with a flat traction-free surface and a smooth raised-cosine bed obstacle. Ice is incompressible and linear viscous, with \(\eta=2.5\times10^8~\mathrm{Pa\,yr}\) and \(\rho=917~\mathrm{kg\,m^{-3}}\). Gravity acts at a mean surface slope of \(0.03~\mathrm{rad}\). We solve for velocity and pressure with Taylor--Hood elements, using quadratic velocity and linear pressure.
+The calculations test whether a steady full-Stokes velocity field can generate a recumbent fold from ordered surface deposition, without first imposing a finite-amplitude layer perturbation. They isolate this question in controlled two-dimensional geometries and are not reconstructions of Allan Hills or another old-ice site. The domain is periodic, \(800~\mathrm{m}\) long and \(160~\mathrm{m}\) thick, with a flat traction-free surface and a smooth raised-cosine bed obstacle. Ice is incompressible and linear viscous, with \(\eta=2.5\times10^8~\mathrm{Pa\,yr}\) and \(\rho=917~\mathrm{kg\,m^{-3}}\). Gravity acts at a mean surface slope of \(0.03~\mathrm{rad}\). We solve for velocity and pressure with Taylor--Hood elements, using quadratic velocity and linear pressure.
 
 The basal boundary is a sliding end member. The bed is fixed, the horizontal basal ice speed is \(U_b=0.20~\mathrm{m\,yr^{-1}}\), and no penetration gives
 \begin{equation}
@@ -877,29 +852,18 @@ Most importantly, the theorem diagnoses overturning of a continuous material iso
 
 \section{Conclusions}
 
-\begin{enumerate}[leftmargin=*]
-  \item A steady two-dimensional isochrone preserves depositional order if and only if its signed order Jacobian remains positive (cf. Equation~\eqref{eq:Jexact}). The equivalent observable condition is \(\tau_z<0\) (Equation~\eqref{eq:Jage}), and in the ordered regime \(\Jord\) is the reciprocal of the established vertical thinning function (Equation~\eqref{eq:thinningrelation}).
+A steady two-dimensional isochrone preserves depositional order if and only if its signed order Jacobian remains positive (cf. Equation~\eqref{eq:Jexact}). The equivalent observable condition is \(\tau_z<0\) (Equation~\eqref{eq:Jage}), and in the ordered regime \(\Jord\) is the reciprocal of the established vertical thinning function (Equation~\eqref{eq:thinningrelation}). Pointwise surface-fast shear, \(u_z\geq0\), is sufficient but not necessary. The exact condition is the cumulative order budget \(\Rneg<1+\Rpos\) (Equation~\eqref{eq:ordercondition}).
 
-  \item Pointwise surface-fast shear, \(u_z\geq0\), is sufficient but not necessary. The exact condition is the cumulative order budget \(\Rneg<1+\Rpos\) (Equation~\eqref{eq:ordercondition}). Local extrusion changes stratigraphic order only if its weighted path integral removes the initial depositional contribution and all accumulated normal shear.
+Full-Stokes mechanics does not guarantee this condition for arbitrary glacier geometry. Gravity-driven shear favors order, but longitudinal stress, nonhydrostatic pressure and horizontal gradients of vertical velocity can generate reverse shear (cf. Equation~\eqref{eq:uzdecomp}). The shallow-ice regime preserves order (Equation~\eqref{eq:SIAorder}); non-stagnant localized obstacles and small-amplitude periodic roughness obey the more restricted results in Equations~\eqref{eq:obstaclebound} and \eqref{eq:periodiccancel}. Stagnation and recirculation invalidate the one-way coordinate construction.
 
-  \item Full-Stokes mechanics does not guarantee this condition for arbitrary glacier geometry. Gravity-driven shear favors order, but longitudinal stress, nonhydrostatic pressure and horizontal gradients of vertical velocity can generate reverse shear (cf. Equation~\eqref{eq:uzdecomp}). Stagnation and recirculation invalidate the one-way coordinate construction entirely.
+The idealized full-Stokes examples generate recumbent isochrones directly from ordered surface-deposition maps (Figures~\ref{fig:numericalfolds}--\ref{fig:numericalconvergence}). One crosses the threshold through persistent reverse shear while horizontal speed remains comparable to its deposition value. The other combines reverse shear with slow-flow amplification. Both retain \(u>0\), and both retain a negative neighboring-trajectory Jacobian under mesh refinement. The intuition that fixed obstacles produce draping rather than folds is therefore conditional: outside ordinary fast, shallow throughflow, a steady velocity field can generate a fold without an inherited perturbation if the diagnostic in Equation~\eqref{eq:Jdiagnostic} reaches zero.
 
-  \item The shallow-ice regime preserves order (Equation~\eqref{eq:SIAorder}). A non-stagnant localized obstacle obeys the speed-and-shear bound in Equation~\eqref{eq:obstaclebound}, and small-amplitude periodic roughness about a uniform plug-flow background has no first-order net order change over a complete wavelength (Equation~\eqref{eq:periodiccancel}).
+For NSF COLDEX at Allan Hills, the next calculation is to integrate \(\Rpos\), \(\Rneg\) and \(\Jord\) along reconstructed source-to-core trajectories using Equations~\eqref{eq:trajectory}--\eqref{eq:Jdiagnostic}. A three-dimensional material map is required where cross-flow or multiple source regions are important. The same diagnostic can test stratigraphic order at continuous old-ice sites such as Beyond EPICA.
 
-  \item The idealized full-Stokes examples generate recumbent isochrones directly from ordered surface-deposition maps (Figures~\ref{fig:numericalfolds}--\ref{fig:numericalconvergence}). One crosses the threshold through persistent reverse shear while horizontal speed remains comparable to its deposition value. The other combines reverse shear with slow-flow amplification. Both retain \(u>0\), and both retain a negative neighboring-trajectory Jacobian under mesh refinement.
+\section*{Data availability statement}
+No new observational data are presented. The analytical results are fully specified by the equations in this manuscript. Three executed notebooks contain the full-Stokes solves, trajectory calculations, numerical checks and figure generation and are available at \texttt{github.com/bradlipovsky/allan-hills-stratigraphy}.
 
-  \item The intuition that fixed obstacles produce draping rather than folds is conditional. It holds in ordinary fast, shallow throughflow and in the bounded regimes considered above. Outside those regimes, a steady full-Stokes velocity field can generate a fold without an inherited perturbation if the cumulative diagnostic in Equation~\eqref{eq:Jdiagnostic} reaches zero.
-
-  \item For NSF COLDEX at Allan Hills, the next calculation is to integrate \(\Rpos\), \(\Rneg\) and \(\Jord\) along reconstructed source-to-core trajectories using Equations~\eqref{eq:trajectory}--\eqref{eq:Jdiagnostic}. A three-dimensional material map is required where cross-flow or multiple source regions are important. The same diagnostic can test stratigraphic order at continuous old-ice sites such as Beyond EPICA.
-\end{enumerate}
-
-\section*{Data availability}
-No new observational data are presented. The analytical results are fully specified by the equations in this manuscript. The numerical diagnostic requires a model velocity field and its vertical derivative.
-
-\section*{Code availability}
-Three executed notebooks in the \texttt{notebooks} directory accompany this manuscript. They contain the full-Stokes solves, trajectory calculations, numerical checks and figure generation.
-
-\section*{Author contribution}
+\section*{Author contributions}
 Bradley Paul Lipovsky developed the analysis and wrote the manuscript draft.
 
 \section*{Competing interests}
@@ -907,6 +871,9 @@ To be completed by the author before submission.
 
 \section*{Acknowledgements}
 To be completed before submission. Support and contributions from NSF COLDEX and collaborating investigators should be documented here.
+
+\bibliographystyle{igs}
+\bibliography{references}
 
 \appendix
 
@@ -1015,12 +982,5 @@ Because the background integrand is identically zero, the \(O(\epsilon_b)\) disp
 =O(\epsilon_b^2),
 \end{equation}
 because differentiation with respect to \(z\) preserves the zero horizontal mean of \(u_1\). This establishes Equation~\eqref{eq:periodiccancel}. For a vertically sheared background, trajectory displacement can act on the nonzero background integrand at first order, so the cancellation does not follow without additional assumptions.
-
-\begingroup
-\small
-\raggedright
-\bibliographystyle{plainnat}
-\bibliography{references}
-\endgroup
 
 \end{document}
