@@ -16,6 +16,8 @@ import pandas as pd
 from IPython.display import display
 from scipy.integrate import solve_ivp
 
+plt.rcParams["ps.fonttype"] = 42
+
 
 LENGTH = 800.0
 THICKNESS = 160.0
@@ -432,8 +434,10 @@ for row, case in enumerate(CASES):
         "sample": result["sample"],
     }
 
-fold_figure = figure_directory / "steady_full_stokes_recumbent_folds.png"
-fig.savefig(fold_figure, dpi=220)
+fold_figure = figure_directory / "Figure3.eps"
+fold_png = figure_directory / "steady_full_stokes_recumbent_folds.png"
+fig.savefig(fold_figure)
+fig.savefig(fold_png, dpi=220)
 plt.show()
 
 
@@ -481,8 +485,10 @@ for row, case in enumerate(CASES):
         }
     )
 
-mechanism_figure = figure_directory / "steady_full_stokes_fold_mechanisms.png"
-fig.savefig(mechanism_figure, dpi=220)
+mechanism_figure = figure_directory / "Figure4.eps"
+mechanism_png = figure_directory / "steady_full_stokes_fold_mechanisms.png"
+fig.savefig(mechanism_figure)
+fig.savefig(mechanism_png, dpi=220)
 plt.show()
 
 diagnostics = pd.DataFrame(diagnostic_rows)
@@ -506,10 +512,19 @@ ax.set(
     title="Fold sign under mesh refinement",
 )
 ax.legend(frameon=False, fontsize=8)
-convergence_figure = figure_directory / "steady_full_stokes_fold_convergence.png"
-fig.savefig(convergence_figure, dpi=220)
+convergence_figure = figure_directory / "Figure5.eps"
+convergence_png = figure_directory / "steady_full_stokes_fold_convergence.png"
+fig.savefig(convergence_figure)
+fig.savefig(convergence_png, dpi=220)
 plt.show()
 
 print("Saved figures:")
-for path in (fold_figure, mechanism_figure, convergence_figure):
+for path in (
+    fold_figure,
+    mechanism_figure,
+    convergence_figure,
+    fold_png,
+    mechanism_png,
+    convergence_png,
+):
     print(f"  {path}")
