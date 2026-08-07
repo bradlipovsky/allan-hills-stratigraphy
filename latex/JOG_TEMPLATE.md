@@ -19,5 +19,7 @@ an error when these files were retrieved on 6 August 2026.
 Build the review manuscript from this directory with
 
 ```sh
-latexmk -pdf manuscript.tex
+latexmk -pdfps manuscript.tex
 ```
+
+The PostScript route preserves the manuscript's EPS figure files directly.
